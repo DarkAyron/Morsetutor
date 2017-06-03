@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include <Xm/Xm.h>
-#include <Dt/Dnd.h>
 
 /*
  * Function type for client session save callback
@@ -61,69 +60,6 @@ typedef enum {
     DTB_CENTER_POSITION_HORIZ,
     DTB_CENTER_POSITION_BOTH
 } DTB_CENTERING_TYPES;
-
-
-/*
- * Types for Drag and Drop utilities
- */
-typedef enum
-{
-    DTB_DND_UNDEF = 0,
-    DTB_DND_ANIMATE,
-    DTB_DND_CONVERT,
-    DTB_DND_DELETE,
-    DTB_DND_DRAG_START,
-    DTB_DND_DROPPED_ON,
-    DTB_DND_DROPPED_ON_ROOT_WINDOW,
-    DTB_DND_FINISH,
-    DTB_DND_RECEIVE_DATA,
-    DTB_DND_REGISTER
-} DTB_DND_REQUEST;
-
-typedef struct
-{
-    DtDndProtocol      protocol;
-    unsigned char      operations;     /* XmCopy | XmMove | XmLink */
-    Boolean            bufferIsText;
-    Boolean            allowDropOnRootWindow;
-    int                numItems;
-    Widget             cursor;         /* from DtDndCreateSourceIcon() */
-} DtbDndDragStartInfoRec, *DtbDndDragStartInfo;
-
-typedef struct
-{
-    Boolean    droppedOnRootWindow;
-} DtbDndDroppedOnRootWindowInfoRec, *DtbDndDroppedOnRootWindowInfo;
-
-typedef void   (*DtbDndDragCallback)(
-                       DTB_DND_REQUEST                 request,
-                       DtbDndDragStartInfo             dragStart,
-                       DtDndConvertCallback            convert,
-                       DtbDndDroppedOnRootWindowInfo   droppedOnRootWindow,
-                       DtDndConvertCallback            deleteSource,
-                       DtDndDragFinishCallback         finish
-               );
-
-typedef unsigned long  DtbDragSiteHandle;
-
-
-typedef struct {
-DtDndProtocol      	protocols;
-unsigned char      	operations;     /* XmCopy | XmMove | XmLink */
-Boolean            	textIsBuffer;
-Boolean            	preservePreviousRegistration;
-Boolean		respondToDropsOnChildren;
-} DtbDndDropRegisterInfoRec, *DtbDndDropRegisterInfo;
-
-typedef void	(*DtbDndDropCallback)(
-			Widget				widget,
-			DTB_DND_REQUEST			request,
-			DtbDndDropRegisterInfo		registerInfo,
-			DtDndTransferCallback		receiveInfo,
-			DtDndDropAnimateCallback	animateInfo
-		);
-
-typedef unsigned long	DtbDropSiteHandle;
 
 
 /*
@@ -228,52 +164,7 @@ void dtb_save_command(
 );
 char *  dtb_get_command();
 String dtb_get_exe_dir(void);
-void dtb_help_dispatch(
-    Widget 	widget,
-    XtPointer 	clientData,
-    XtPointer 	callData
-);
-void dtb_more_help_dispatch(
-    Widget 	widget,
-    XtPointer 	clientData,
-    XtPointer 	callData
-);
-void dtb_help_back_hdlr(
-    Widget 	widget,
-    XtPointer 	clientData,
-    XtPointer 	callData
-);
-void dtb_do_onitem_help();
-int dtb_show_help_volume_info(
-    char	*volume_name,
-    char	*location_id
-);
-void  dtb_call_help_callback(
-    Widget widget,
-    XtPointer clientData,
-    XtPointer callData
-);
 int  dtb_popup_menu_register(Widget popupMenu, Widget parent);
-int dtb_drag_site_register(
-                        Widget 			widget,
-			DtbDndDragCallback	callback,
-			DtDndProtocol		protocol,
-			unsigned char		operations,
-			Boolean			bufferIsText,
-			Boolean			allowDropOnRootWindow,
-			Pixmap			cursor,
-			Pixmap			cursorMask,
-			DtbDragSiteHandle	*dragSiteHandleOut
-);
-int dtb_drop_site_register(
-                        Widget                  widget,
-                        DtbDndDropCallback      callback,
-                        DtDndProtocol		protocols,
-                        unsigned char           operations,
-                        Boolean                 dropsOnChildren,
-                        Boolean                 preservePreviousRegistration,
-                        DtbDropSiteHandle       *dropSiteHandleOut
-);
 void dtb_children_center(
     Widget		form,
     DTB_CENTERING_TYPES	type
@@ -301,13 +192,6 @@ void dtb_children_align(
     int			hoffset,
     int			voffset
 );
-void dtb_session_save(
-    Widget 	widget,
-    XtPointer 	clientData,
-    XtPointer 	callData
-);
-DtbClientSessionSaveCB dtb_get_client_session_saveCB();
-
 
 #define dtb_cvt_string_to_pixel(parent, str) \
         ((Pixel)dtb_cvt_resource_from_string( \

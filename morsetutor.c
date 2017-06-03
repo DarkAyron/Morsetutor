@@ -26,9 +26,6 @@
 #include <Xm/Xm.h>
 #include <Xm/MwmUtil.h>
 #include <Xm/Protocols.h>
-#include <Dt/Help.h>
-#include <Dt/HelpQuickD.h>
-#include <Dt/HelpDialog.h>
 #include "main_ui.h"
 #include "settings_ui.h"
 #include "charset_ui.h"

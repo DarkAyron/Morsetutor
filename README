@@ -5,3 +5,5 @@ This programme is intended to be used for learning and teaching morse code.
 It can send random letter groups and prepared texts trough my telegraphy
 interface.
 
+I've removed the CDE-dependecies created by DtBuilder. If you need to
+edit the GUI, apply nocde.diff after running the code-generator.
