@@ -1,0 +1,1233 @@
+:bil-version	1 0
+:module charset
+(
+
+:element charsetDialog
+(
+	:type			:dialog
+	:width			542
+	:height			220
+	:bg-color		"white"
+	:label			"Charset"
+	:resizable		:false
+	:visible		:false
+	:default-button		charset_ok
+	:children		(
+		controlpane
+		dialog_button_panel
+	)
+)
+:element controlpane
+(
+	:type			:container
+	:container-type		:relative
+	:x			36
+	:y			34
+	:width			542
+	:height			220
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		charBox
+		lessonBox
+		separator
+		stageBox
+	)
+)
+:element charBox
+(
+	:type			:choice
+	:choice-type		:nonexclusive
+	:x			9
+	:y			11
+	:label-type		:string
+	:label			" "
+	:label-position		:west
+	:num-columns		5
+	:orientation		:horizontal
+	:selection-required	:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 10)
+	:west-attachment	(:point 0 10)
+	:children		(
+		charBox_A_item
+		charBox_B_item
+		charBox_C_item
+		charBox_D_item
+		charBox_E_item
+		charBox_F_item
+		charBox_G_item
+		charBox_H_item
+		charBox_I_item
+		charBox_J_item
+		charBox_K_item
+		charBox_L_item
+		charBox_M_item
+		charBox_N_item
+		charBox_O_item
+		charBox_P_item
+		charBox_Q_item
+		charBox_R_item
+		charBox_S_item
+		charBox_T_item
+		charBox_U_item
+		charBox_V_item
+		charBox_W_item
+		charBox_X_item
+		charBox_Y_item
+		charBox_Z_item
+		charBox_one_item
+		charBox_two_item
+		charBox_three_item
+		charBox_four_item
+		charBox_five_item
+		charBox_six_item
+		charBox_seven_item
+		charBox_eight_item
+		charBox_nine_item
+		charBox_zero_item
+		charBox_dot_item
+		charBox_comma_item
+		charBox_exclamation_item
+		charBox_question_item
+		charBox_equal_item
+		charBox_dash_item
+		charBox_underline_item
+		charBox_colon_item
+		charBox_semicolon_item
+		charBox_apostrophe_item
+		charBox_quotation_item
+		charBox_slash_item
+		charBox_open_bracket_item
+		charBox_close_bracket_item
+		charBox_dollar_item
+		charBox_ampersand_item
+		charBox_at_item
+		charBox_begin_item
+		charBox_end_item
+	)
+)
+:element charBox_A_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"A"
+	:active			:true
+	:selected		:false
+)
+:element charBox_B_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"B"
+	:active			:true
+	:selected		:false
+)
+:element charBox_C_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"C"
+	:active			:true
+	:selected		:false
+)
+:element charBox_D_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"D"
+	:active			:true
+	:selected		:false
+)
+:element charBox_E_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"E"
+	:active			:true
+	:selected		:false
+)
+:element charBox_F_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"F"
+	:active			:true
+	:selected		:false
+)
+:element charBox_G_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"G"
+	:active			:true
+	:selected		:false
+)
+:element charBox_H_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"H"
+	:active			:true
+	:selected		:false
+)
+:element charBox_I_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"I"
+	:active			:true
+	:selected		:false
+)
+:element charBox_J_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"J"
+	:active			:true
+	:selected		:false
+)
+:element charBox_K_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"K"
+	:active			:true
+	:selected		:false
+)
+:element charBox_L_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"L"
+	:active			:true
+	:selected		:false
+)
+:element charBox_M_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"M"
+	:active			:true
+	:selected		:false
+)
+:element charBox_N_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"N"
+	:active			:true
+	:selected		:false
+)
+:element charBox_O_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"O"
+	:active			:true
+	:selected		:false
+)
+:element charBox_P_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"P"
+	:active			:true
+	:selected		:false
+)
+:element charBox_Q_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"Q"
+	:active			:true
+	:selected		:false
+)
+:element charBox_R_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"R"
+	:active			:true
+	:selected		:false
+)
+:element charBox_S_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"S"
+	:active			:true
+	:selected		:false
+)
+:element charBox_T_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"T"
+	:active			:true
+	:selected		:false
+)
+:element charBox_U_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"U"
+	:active			:true
+	:selected		:false
+)
+:element charBox_V_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"V"
+	:active			:true
+	:selected		:false
+)
+:element charBox_W_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"W"
+	:active			:true
+	:selected		:false
+)
+:element charBox_X_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"X"
+	:active			:true
+	:selected		:false
+)
+:element charBox_Y_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"Y"
+	:active			:true
+	:selected		:false
+)
+:element charBox_Z_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"Z"
+	:active			:true
+	:selected		:false
+)
+:element charBox_one_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"1"
+	:active			:true
+	:selected		:false
+)
+:element charBox_two_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"2"
+	:active			:true
+	:selected		:false
+)
+:element charBox_three_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"3"
+	:active			:true
+	:selected		:false
+)
+:element charBox_four_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"4"
+	:active			:true
+	:selected		:false
+)
+:element charBox_five_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"5"
+	:active			:true
+	:selected		:false
+)
+:element charBox_six_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"6"
+	:active			:true
+	:selected		:false
+)
+:element charBox_seven_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"7"
+	:active			:true
+	:selected		:false
+)
+:element charBox_eight_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"8"
+	:active			:true
+	:selected		:false
+)
+:element charBox_nine_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"9"
+	:active			:true
+	:selected		:false
+)
+:element charBox_zero_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"0"
+	:active			:true
+	:selected		:false
+)
+:element charBox_dot_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"."
+	:active			:true
+	:selected		:false
+)
+:element charBox_comma_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			","
+	:active			:true
+	:selected		:false
+)
+:element charBox_exclamation_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"!"
+	:active			:true
+	:selected		:false
+)
+:element charBox_question_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"?"
+	:active			:true
+	:selected		:false
+)
+:element charBox_equal_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"="
+	:active			:true
+	:selected		:false
+)
+:element charBox_dash_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"-"
+	:active			:true
+	:selected		:false
+)
+:element charBox_underline_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"_"
+	:active			:true
+	:selected		:false
+)
+:element charBox_colon_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			":"
+	:active			:true
+	:selected		:false
+)
+:element charBox_semicolon_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			";"
+	:active			:true
+	:selected		:false
+)
+:element charBox_apostrophe_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"'"
+	:active			:true
+	:selected		:false
+)
+:element charBox_quotation_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"\""
+	:active			:true
+	:selected		:false
+)
+:element charBox_slash_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"/"
+	:active			:true
+	:selected		:false
+)
+:element charBox_open_bracket_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"("
+	:active			:true
+	:selected		:false
+)
+:element charBox_close_bracket_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			")"
+	:active			:true
+	:selected		:false
+)
+:element charBox_dollar_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"$"
+	:active			:true
+	:selected		:false
+)
+:element charBox_ampersand_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"&"
+	:active			:true
+	:selected		:false
+)
+:element charBox_at_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"@"
+	:active			:true
+	:selected		:false
+)
+:element charBox_begin_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"~"
+	:active			:true
+	:selected		:false
+)
+:element charBox_end_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"+"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox
+(
+	:type			:choice
+	:choice-type		:option-menu
+	:x			38
+	:y			171
+	:label-type		:string
+	:label			"Lesson:"
+	:label-position		:west
+	:num-columns		1
+	:orientation		:vertical
+	:selection-required	:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj separator 5)
+	:west-attachment	(:point 0 10)
+	:children		(
+		lessonBox_lesson1_item
+		lessonBox_lesson2_item
+		lessonBox_lesson3_item
+		lessonBox_lesson4_item
+		lessonBox_lesson5_item
+		lessonBox_lesson6_item
+		lessonBox_lesson7_item
+		lessonBox_lesson8_item
+		lessonBox_lesson9_item
+		lessonBox_lesson10_item
+		lessonBox_lesson11_item
+		lessonBox_lesson12_item
+		lessonBox_lesson13_item
+		lessonBox_lesson14_item
+		lessonBox_lesson15_item
+		lessonBox_lesson16_item
+		lessonBox_lesson17_item
+		lessonBox_lesson18_item
+		lessonBox_lesson19_item
+		lessonBox_lesson20_item
+		lessonBox_lesson21_item
+		lessonBox_lesson22_item
+		lessonBox_lesson23_item
+		lessonBox_lesson24_item
+		lessonBox_lesson25_item
+		lessonBox_user_item
+	)
+)
+:element lessonBox_lesson1_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"1 - elv"
+	:active			:true
+	:selected		:true
+)
+:element lessonBox_lesson2_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"2 - 0a"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson3_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"3 - sq"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson4_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"4 - t2"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson5_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"5 - oc"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson6_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"6 - =d"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson7_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"7 - 5r"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson8_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"8 - /?"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson9_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"9 - i9"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson10_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"10 - gx"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson11_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"11 - f4"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson12_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"12 - nj"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson13_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"13 - u7"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson14_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"14 - h,"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson15_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"15 - kb"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson16_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"16 - 3p"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson17_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"17 - my"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson18_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"18 - zw"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson19_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"19 - 61"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson20_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"20 - 8."
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson21_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"21 - !@"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson22_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"22 - :;"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson23_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"23 - ()"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson24_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"24 - \"$"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_lesson25_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"25 - '&"
+	:active			:true
+	:selected		:false
+)
+:element lessonBox_user_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"user defined"
+	:active			:true
+	:selected		:false
+)
+:element separator
+(
+	:type			:separator
+	:line-style		:etched-in
+	:orientation		:horizontal
+	:x			102
+	:y			156
+	:height			10
+	:visible		:true
+	:north-attachment	(:obj charBox 5)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element stageBox
+(
+	:type			:choice
+	:choice-type		:option-menu
+	:x			273
+	:y			183
+	:label-type		:string
+	:label			"Stage:"
+	:label-position		:west
+	:num-columns		1
+	:orientation		:vertical
+	:selection-required	:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj separator 5)
+	:west-attachment	(:obj lessonBox 10)
+	:children		(
+		stageBox_only_new
+		stageBox_one
+		stageBox_all
+	)
+)
+:element stageBox_only_new
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"only new characters"
+	:active			:true
+	:selected		:true
+)
+:element stageBox_one
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"previous +1 new"
+	:active			:true
+	:selected		:false
+)
+:element stageBox_all
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"all characters"
+	:active			:true
+	:selected		:false
+)
+:element dialog_button_panel
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		charset_ok
+		charset_reset
+		charset_cancel
+	)
+)
+:element charset_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 30 0)
+	:west-attachment	(:grid-line 10 0)
+)
+:element charset_reset
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Reset"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 60 0)
+	:west-attachment	(:grid-line 40 0)
+)
+:element charset_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 90 0)
+	:west-attachment	(:grid-line 70 0)
+)
+:connection
+(
+	:from			charset_ok
+	:to			charsetDialog
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			charset_ok
+	:when			:activate
+	:action-type		:call-function
+	:action			setCharset
+)
+:connection
+(
+	:from			charset_reset
+	:when			:activate
+	:action-type		:call-function
+	:action			resetCharset
+)
+:connection
+(
+	:from			charset_cancel
+	:to			charsetDialog
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			lessonBox_lesson1_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson2_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson3_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson4_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson5_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson6_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson7_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson8_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson9_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson10_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson11_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson12_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson13_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson14_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson15_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson16_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson17_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson18_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson19_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson20_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson21_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson22_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson23_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson24_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			lessonBox_lesson25_item
+	:when			:activate
+	:action-type		:call-function
+	:action			setLesson
+)
+:connection
+(
+	:from			stageBox_only_new
+	:when			:activate
+	:action-type		:call-function
+	:action			setLessonStage
+)
+:connection
+(
+	:from			stageBox_one
+	:when			:activate
+	:action-type		:call-function
+	:action			setLessonStage
+)
+:connection
+(
+	:from			stageBox_all
+	:when			:activate
+	:action-type		:call-function
+	:action			setLessonStage
+)
+)

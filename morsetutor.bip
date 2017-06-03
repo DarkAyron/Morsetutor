@@ -1,0 +1,22 @@
+:bil-version	1 0
+:project morsetutor
+(
+	:files			(main.bil settings.bil charset.bil connect.bil)
+	:vendor			"Draconitron"
+	:version		"1.0"
+	:root-window		main.mainwindow
+	:session-management	(
+		:sessioning-method :none
+	)
+	:tooltalk		(
+		:desktop-level	:none
+	)
+	:internationalization	(
+		:enabled	:false
+	)
+	:res-file-types		()
+	:c-header-file-extension ".h"
+	:c-impl-file-extension	".c"
+	:write-main-func	:true
+
+)

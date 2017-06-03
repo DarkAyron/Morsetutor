@@ -1,0 +1,464 @@
+:bil-version	1 0
+:module main
+(
+
+:element mainwindow
+(
+	:type			:base-window
+	:width			662
+	:height			380
+	:bg-color		"white"
+	:label			"Morsetutor"
+	:resizable		:true
+	:visible		:true
+	:iconic			:false
+	:children		(
+		menubar
+		mainwindow_toolbar
+		rxBox
+		outputBox
+	)
+	:win-children		(
+		settings.speedDialog
+		settings.codeDialog
+		charset.charsetDialog
+		about
+		connect.connect
+	)
+)
+:element menubar
+(
+	:type			:container
+	:container-type		:menu-bar
+	:active			:true
+	:children		(
+		menubar_File_item
+		menubar_Edit_item
+		menubar_Training_item
+		menubar_Help_item
+	)
+)
+:element menubar_File_item
+(
+	:type			:item
+	:item-type		:item-for-menubar
+	:label-type		:string
+	:label			"File"
+	:is-help-item		:false
+	:mnemonic		"F"
+	:menu			File_menu
+	:active			:true
+)
+:element menubar_Edit_item
+(
+	:type			:item
+	:item-type		:item-for-menubar
+	:label-type		:string
+	:label			"Edit"
+	:is-help-item		:false
+	:mnemonic		"E"
+	:menu			Edit_menu
+	:active			:true
+)
+:element menubar_Training_item
+(
+	:type			:item
+	:item-type		:item-for-menubar
+	:label-type		:string
+	:label			"Training"
+	:is-help-item		:false
+	:mnemonic		"T"
+	:menu			Training_menu
+	:active			:true
+)
+:element menubar_Help_item
+(
+	:type			:item
+	:item-type		:item-for-menubar
+	:label-type		:string
+	:label			"Help"
+	:is-help-item		:true
+	:mnemonic		"H"
+	:menu			Help_menu
+	:active			:true
+)
+:element mainwindow_toolbar
+(
+	:type			:container
+	:container-type		:tool-bar
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		connectButton
+		startButton
+		pauseButton
+		stopButton
+	)
+)
+:element connectButton
+(
+	:type			:button
+	:button-type		:push-button
+	:x			5
+	:y			4
+	:label-type		:graphic
+	:label-alignment	:center
+	:label			"connect.m"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 4)
+	:west-attachment	(:point 0 5)
+)
+:element startButton
+(
+	:type			:button
+	:button-type		:push-button
+	:x			57
+	:y			4
+	:label-type		:graphic
+	:label-alignment	:center
+	:label			"key_start.m"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 4)
+	:west-attachment	(:obj connectButton 12)
+)
+:element pauseButton
+(
+	:type			:button
+	:button-type		:push-button
+	:x			103
+	:y			4
+	:label-type		:graphic
+	:label-alignment	:center
+	:label			"key_pause.m"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 4)
+	:west-attachment	(:obj startButton 5)
+)
+:element stopButton
+(
+	:type			:button
+	:button-type		:push-button
+	:x			149
+	:y			6
+	:label-type		:graphic
+	:label-alignment	:center
+	:label			"key_stop.m"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 4)
+	:west-attachment	(:obj pauseButton 5)
+)
+:element rxBox
+(
+	:type			:text-pane
+	:text-type		:alphanumeric
+	:x			0
+	:y			135
+	:border-frame		:none
+	:num-rows		1
+	:num-columns		48
+	:hscrollbar		:never
+	:vscrollbar		:never
+	:word-wrap		:true
+	:read-only		:false
+	:active			:true
+	:visible		:true
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:obj mainwindow 0)
+	:west-attachment	(:point 0 0)
+)
+:element outputBox
+(
+	:type			:text-pane
+	:text-type		:alphanumeric
+	:x			37
+	:y			16
+	:width			662
+	:height			348
+	:border-frame		:none
+	:num-rows		4
+	:num-columns		8
+	:hscrollbar		:never
+	:vscrollbar		:always
+	:word-wrap		:true
+	:read-only		:true
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:obj rxBox 2)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element File_menu
+(
+	:type			:menu
+	:tear-off		:false
+	:children		(
+		File_menu_items_item
+		File_menu_separator1_item
+		File_menu_Quit_item
+	)
+)
+:element File_menu_items_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Connect..."
+	:mnemonic		"C"
+	:active			:true
+)
+:element File_menu_separator1_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:separator
+	:line-style		:etched-out
+	:active			:true
+)
+:element File_menu_Quit_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Quit"
+	:mnemonic		"Q"
+	:active			:true
+)
+:element Edit_menu
+(
+	:type			:menu
+	:tear-off		:false
+	:children		(
+		Edit_menu_items_item
+		Edit_menu_items_item2
+		Edit_menu_items_item3
+	)
+)
+:element Edit_menu_items_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Speed settings..."
+	:mnemonic		"S"
+	:active			:true
+)
+:element Edit_menu_items_item2
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Character set..."
+	:mnemonic		"C"
+	:active			:true
+)
+:element Edit_menu_items_item3
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Morse code..."
+	:mnemonic		"M"
+	:active			:true
+)
+:element Training_menu
+(
+	:type			:menu
+	:tear-off		:false
+	:children		(
+		Training_menu_Start_item
+	)
+)
+:element Training_menu_Start_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Start"
+	:mnemonic		"S"
+	:active			:true
+)
+:element Help_menu
+(
+	:type			:menu
+	:tear-off		:false
+	:children		(
+		Help_menu_items_item
+	)
+)
+:element Help_menu_items_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"About..."
+	:mnemonic		"A"
+	:active			:true
+)
+:element about
+(
+	:type			:dialog
+	:width			454
+	:height			304
+	:bg-color		"white"
+	:label			"About"
+	:resizable		:false
+	:visible		:false
+	:default-button		about_ok
+	:children		(
+		controlpane
+		dialog_button_panel
+	)
+)
+:element controlpane
+(
+	:type			:container
+	:container-type		:relative
+	:x			120
+	:y			31
+	:width			454
+	:height			304
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		label
+	)
+)
+:element label
+(
+	:type			:label
+	:x			19
+	:y			16
+	:label-type		:graphic
+	:label			"about"
+	:label-alignment	:center
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element dialog_button_panel
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		about_ok
+	)
+)
+:element about_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 60 0)
+	:west-attachment	(:grid-line 40 0)
+)
+:connection
+(
+	:from			connectButton
+	:when			:activate
+	:action-type		:call-function
+	:action			doConnect
+)
+:connection
+(
+	:from			startButton
+	:when			:activate
+	:action-type		:call-function
+	:action			startTraining
+)
+:connection
+(
+	:from			pauseButton
+	:when			:activate
+	:action-type		:call-function
+	:action			pauseTraining
+)
+:connection
+(
+	:from			stopButton
+	:when			:activate
+	:action-type		:call-function
+	:action			stopTraining
+)
+:connection
+(
+	:from			about_ok
+	:to			about
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			File_menu_items_item
+	:when			:activate
+	:action-type		:call-function
+	:action			doConnect
+)
+:connection
+(
+	:from			File_menu_Quit_item
+	:when			:activate
+	:action-type		:call-function
+	:action			doQuit
+)
+:connection
+(
+	:from			Edit_menu_items_item
+	:when			:activate
+	:action-type		:call-function
+	:action			showSpeed
+)
+:connection
+(
+	:from			Edit_menu_items_item2
+	:when			:activate
+	:action-type		:call-function
+	:action			showCharset
+)
+:connection
+(
+	:from			Edit_menu_items_item3
+	:when			:activate
+	:action-type		:call-function
+	:action			showCode
+)
+:connection
+(
+	:from			Training_menu_Start_item
+	:when			:activate
+	:action-type		:call-function
+	:action			startTraining
+)
+:connection
+(
+	:from			Help_menu_items_item
+	:to			about
+	:when			:activate
+	:action-type		:builtin
+	:action			:show
+	:arg-type		:void
+)
+)

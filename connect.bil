@@ -1,0 +1,162 @@
+:bil-version	1 0
+:module connect
+(
+
+:element connect
+(
+	:type			:dialog
+	:width			380
+	:height			91
+	:bg-color		"white"
+	:label			"Connect"
+	:resizable		:false
+	:visible		:false
+	:default-button		connect_ok
+	:children		(
+		controlpane
+		dialog_button_panel
+	)
+)
+:element controlpane
+(
+	:type			:container
+	:container-type		:relative
+	:x			59
+	:y			40
+	:width			380
+	:height			91
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		networkBox
+		nodeBox
+	)
+)
+:element networkBox
+(
+	:type			:choice
+	:choice-type		:option-menu
+	:x			45
+	:y			20
+	:label-type		:string
+	:label			"Network:"
+	:label-position		:west
+	:num-columns		1
+	:orientation		:vertical
+	:selection-required	:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 10)
+	:west-attachment	(:point 0 5)
+	:children		(
+		networkBox_items_item
+	)
+)
+:element networkBox_items_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"00000000"
+	:active			:true
+	:selected		:true
+)
+:element nodeBox
+(
+	:type			:text-field
+	:text-type		:alphanumeric
+	:x			47
+	:y			71
+	:label-type		:string
+	:label			"Node:"
+	:label-position		:west
+	:num-columns		8
+	:max-length		80
+	:read-only		:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj networkBox 5)
+	:west-attachment	(:point 0 5)
+)
+:element dialog_button_panel
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		connect_ok
+		connect_rescan
+		connect_cancel
+	)
+)
+:element connect_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Ok"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 30 0)
+	:west-attachment	(:grid-line 10 0)
+)
+:element connect_rescan
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Rescan"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 60 0)
+	:west-attachment	(:grid-line 40 0)
+)
+:element connect_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 90 0)
+	:west-attachment	(:grid-line 70 0)
+)
+:connection
+(
+	:from			connect_ok
+	:when			:activate
+	:action-type		:call-function
+	:action			connectOk
+)
+:connection
+(
+	:from			connect_rescan
+	:when			:activate
+	:action-type		:call-function
+	:action			doRescan
+)
+:connection
+(
+	:from			connect_cancel
+	:to			connect
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+)

@@ -1,0 +1,291 @@
+:bil-version	1 0
+:module settings
+(
+
+:element speedDialog
+(
+	:type			:dialog
+	:width			511
+	:height			166
+	:bg-color		"white"
+	:label			"Speed"
+	:resizable		:false
+	:visible		:false
+	:default-button		speed_ok
+	:children		(
+		controlpane
+		dialog_button_panel
+	)
+)
+:element controlpane
+(
+	:type			:container
+	:container-type		:relative
+	:x			22
+	:y			18
+	:width			511
+	:height			166
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		Speed
+		farnsworth
+	)
+)
+:element Speed
+(
+	:type			:scale
+	:label-type		:string
+	:label			"Speed"
+	:label-position		:north
+	:read-only		:false
+	:orientation		:horizontal
+	:direction		:left-to-right
+	:min-value		12
+	:max-value		60
+	:initial-value		25
+	:increment		1
+	:decimal-points		0
+	:show-value		:true
+	:x			206
+	:y			16
+	:width			501
+	:height			40
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 15)
+	:east-attachment	(:point 0 5)
+	:west-attachment	(:point 0 5)
+)
+:element farnsworth
+(
+	:type			:scale
+	:label-type		:string
+	:label			"Additional Farnsworth dots"
+	:label-position		:north
+	:read-only		:false
+	:orientation		:horizontal
+	:direction		:left-to-right
+	:min-value		0
+	:max-value		40
+	:initial-value		0
+	:increment		1
+	:decimal-points		0
+	:show-value		:true
+	:x			57
+	:y			118
+	:width			501
+	:height			40
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj Speed 10)
+	:east-attachment	(:point 0 5)
+	:west-attachment	(:point 0 5)
+)
+:element dialog_button_panel
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		speed_ok
+		speed_cancel
+	)
+)
+:element speed_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 30 0)
+	:west-attachment	(:grid-line 10 0)
+)
+:element speed_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 90 0)
+	:west-attachment	(:grid-line 70 0)
+)
+:element codeDialog
+(
+	:type			:dialog
+	:width			334
+	:height			124
+	:bg-color		"white"
+	:label			"Morse Code"
+	:resizable		:false
+	:visible		:false
+	:default-button		code_ok
+	:children		(
+		controlpane2
+		dialog_button_panel2
+	)
+)
+:element controlpane2
+(
+	:type			:container
+	:container-type		:relative
+	:x			199
+	:y			29
+	:width			334
+	:height			124
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		codeBox
+	)
+)
+:element codeBox
+(
+	:type			:choice
+	:choice-type		:exclusive
+	:x			51
+	:y			40
+	:label-type		:string
+	:label			" "
+	:label-position		:west
+	:num-columns		1
+	:orientation		:vertical
+	:selection-required	:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:center-grid-line 50 0)
+	:west-attachment	(:center-grid-line 50 0)
+	:children		(
+		codeBox_International_item
+		codeBox_items_item
+	)
+)
+:element codeBox_International_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"International"
+	:active			:true
+	:selected		:true
+)
+:element codeBox_items_item
+(
+	:type			:item
+	:item-type		:item-for-choice
+	:label-type		:string
+	:label			"Railroad Morse"
+	:active			:true
+	:selected		:false
+)
+:element dialog_button_panel2
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		code_ok
+		code_cancel
+	)
+)
+:element code_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 40 0)
+	:west-attachment	(:grid-line 10 0)
+)
+:element code_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 90 0)
+	:west-attachment	(:grid-line 60 0)
+)
+:connection
+(
+	:from			speed_cancel
+	:to			speedDialog
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			speed_ok
+	:to			speedDialog
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			speed_ok
+	:when			:activate
+	:action-type		:call-function
+	:action			setSpeed
+)
+:connection
+(
+	:from			code_ok
+	:to			codeDialog
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			code_ok
+	:when			:activate
+	:action-type		:call-function
+	:action			setCode
+)
+:connection
+(
+	:from			code_cancel
+	:to			codeDialog
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+)
