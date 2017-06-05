@@ -21,12 +21,6 @@
  * Shared data structures
  */
 
-typedef struct {
-    Widget	items_item;
-} ConnectNetworkBoxItemsRec, *ConnectNetworkBoxItems;
-typedef struct {
-    Widget	items_item;
-} ConnectNetworkBoxMenuItemsRec, *ConnectNetworkBoxMenuItems;
 typedef struct
 {
     Boolean	initialized;
@@ -43,19 +37,23 @@ typedef struct
     Widget	networkBox_menu;
     Widget	networkBox_label;
     Widget	networkBox;
-    ConnectNetworkBoxItemsRec	networkBox_items;
     
     Widget	nodeBox_rowcolumn;	/* object "nodeBox" */
     Widget	nodeBox_label;
     Widget	nodeBox;
     
+    Widget	separator;
     Widget	connect_ok;
     Widget	connect_rescan;
     Widget	connect_cancel;
 } DtbConnectConnectInfoRec, *DtbConnectConnectInfo;
 
 
+
+
 extern DtbConnectConnectInfoRec dtb_connect_connect;
+extern DtbMessageDataRec dtb_connect_netunreach;
+extern DtbMessageDataRec dtb_connect_noderesponse;
 
 /*
  * Structure Clear Procedures: These set the fields to NULL
@@ -69,6 +67,8 @@ int dtb_connect_connect_initialize(
     DtbConnectConnectInfo	instance,
     Widget	parent
 );
+int dtb_connect_netunreach_initialize(DtbMessageData instance);
+int dtb_connect_noderesponse_initialize(DtbMessageData instance);
 
 /*
  * User Callbacks

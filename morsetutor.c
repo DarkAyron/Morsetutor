@@ -100,6 +100,8 @@ main(
      *** Add local variables and code.
      ***/
     
+    XtToolkitThreadInitialize();
+
     /*** DTB_USER_CODE_END
      ***
      *** End of user code section
@@ -160,6 +162,8 @@ main(
     dtbSettingsCodeDialogInfo_clear(&dtb_settings_code_dialog);
     dtbCharsetCharsetDialogInfo_clear(&dtb_charset_charset_dialog);
     dtbConnectConnectInfo_clear(&dtb_connect_connect);
+    dtb_connect_netunreach_initialize(&dtb_connect_netunreach);
+    dtb_connect_noderesponse_initialize(&dtb_connect_noderesponse);
     
     /*
      * Set up the application's root (primary) window.

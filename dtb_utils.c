@@ -62,6 +62,19 @@ static void centering_handler(
     Boolean	*cont_dispatch
 );
 /*
+ * Static functions used for messages.
+ */
+static void destroyCB(
+    Widget      widget,
+    XtPointer   client_data,
+    XtPointer   call_data
+);
+static void modal_dlgCB(
+    Widget      widget,
+    XtPointer   client_data,
+    XtPointer   call_data
+);
+/*
  * Static functions used for dynamic aligning of group objects
  */
 static Widget get_label_widget(
@@ -817,6 +830,385 @@ dtb_get_command()
 {
     return(dtb_save_command_str); 
 }
+
+/*
+ * Create a Message Dialog.
+ */
+Widget
+dtb_create_message_dlg(
+    Widget		parent,
+    DtbMessageData	mbr,
+    XmString		override_msg,
+    DtbObjectHelpData	override_help
+)
+{
+    Widget      	msg_dlg = (Widget) NULL;
+    Widget      	shell = (Widget) NULL;
+    Widget      	button = (Widget) NULL;
+    Widget		action_button = (Widget) NULL;
+    unsigned char	default_btn = XmDIALOG_NONE;
+    Arg         	arg[12];
+    int         	n = 0;
+
+    /* The dialog should be parented off of a Shell,
+     * so walk up the tree to find the parent's shell
+     * ancestor...
+     */
+    shell = parent;
+    while(!XtIsSubclass(shell, shellWidgetClass))
+        shell = XtParent(shell);
+ 
+    msg_dlg = XmCreateMessageDialog(shell,"dtb_msg_dlg", NULL, 0);
+ 
+    if (!mbr->cancel_button)
+    {
+        button = XmMessageBoxGetChild(msg_dlg, XmDIALOG_CANCEL_BUTTON);
+        XtUnmanageChild(button);
+    }
+    if (!mbr->help_button)
+    {
+        button = XmMessageBoxGetChild(msg_dlg, XmDIALOG_HELP_BUTTON);
+        XtUnmanageChild(button);
+    }
+    if (mbr->action1_label == (XmString) NULL)
+    {
+        button = XmMessageBoxGetChild(msg_dlg, XmDIALOG_OK_BUTTON);
+        XtUnmanageChild(button);
+    }
+    else
+    {
+        XtSetArg(arg[n], XmNokLabelString, mbr->action1_label); n++;
+    }
+    /* Create an extra button for the MessageBox */
+    if (mbr->action2_label != (XmString) NULL)
+    {
+	button = XtVaCreateManagedWidget("action2_button",
+			xmPushButtonWidgetClass,
+			msg_dlg,
+			XmNlabelString,	mbr->action2_label,
+			XmNuserData,	DTB_ACTION2_BUTTON,
+			NULL);
+    }
+    /* Create an extra button for the MessageBox */
+    if (mbr->action3_label != (XmString) NULL)
+    {
+        button = XtVaCreateManagedWidget("action3_button",
+                        xmPushButtonWidgetClass,
+                        msg_dlg,
+                        XmNlabelString, mbr->action3_label,
+                        XmNuserData,    DTB_ACTION3_BUTTON,
+                        NULL);
+    }
+
+    XtSetArg(arg[n], XmNdialogType,       mbr->type);            n++;
+    XtSetValues(msg_dlg, arg, n);
+
+    if (override_msg != (XmString) NULL)
+    {
+	XtVaSetValues(msg_dlg, XmNmessageString, override_msg, NULL);
+    }
+    else if (mbr->message != (XmString) NULL)
+    {
+	XtVaSetValues(msg_dlg, XmNmessageString, mbr->message, NULL);
+    }
+
+    if (mbr->title != (XmString) NULL)
+    {
+	XtVaSetValues(msg_dlg, XmNdialogTitle, mbr->title, NULL);
+    }
+    else
+    {
+        XmString        null_str;
+
+        null_str = XmStringCreateLocalized(" ");
+        XtVaSetValues(msg_dlg, XmNdialogTitle, null_str, NULL);
+        XmStringFree(null_str);
+    }
+
+
+    switch (mbr->default_button)
+    {
+	case DTB_ACTION1_BUTTON:
+	    default_btn = XmDIALOG_OK_BUTTON;
+	    break;
+	case DTB_ACTION2_BUTTON:
+	case DTB_ACTION3_BUTTON:
+	case DTB_NONE:
+	    default_btn = XmDIALOG_NONE;
+	    break;
+	case DTB_CANCEL_BUTTON:
+	    default_btn = XmDIALOG_CANCEL_BUTTON;
+	    break;
+	default:
+	    break;
+    }
+    XtVaSetValues(msg_dlg, XmNdefaultButtonType, default_btn, NULL);
+
+    if (mbr->default_button == DTB_ACTION2_BUTTON)
+    {
+	action_button = dtb_MessageBoxGetActionButton(msg_dlg,
+				DTB_ACTION2_BUTTON);
+    }
+    else if (mbr->default_button == DTB_ACTION3_BUTTON)
+    {
+        action_button = dtb_MessageBoxGetActionButton(msg_dlg,
+                                DTB_ACTION3_BUTTON);
+    }
+
+    if (action_button != (Widget) NULL)
+    {
+	XtVaSetValues(action_button, 
+                        XmNdefaultButtonShadowThickness, 2,
+			XmNshowAsDefault, True, 
+			NULL);
+	XtVaSetValues(msg_dlg, XmNdefaultButton, action_button, NULL);
+    }
+
+    XtAddCallback(XtParent(msg_dlg), XtNpopdownCallback, destroyCB,
+		 (XtPointer) override_help);
+
+    return(msg_dlg);
+}
+
+
+/*
+ * popdownCallback for MessageBox.
+ */
+static void
+destroyCB(
+    Widget      widget,
+    XtPointer   client_data,
+    XtPointer   call_data
+)
+{
+    DtbObjectHelpData 	help_data = (DtbObjectHelpData)client_data;
+
+    if (help_data != (DtbObjectHelpData) NULL)
+    {
+	if (help_data->help_text)
+	    XtFree((char *)help_data->help_text);
+	if (help_data->help_volume)
+	    XtFree((char *)help_data->help_volume);
+	if (help_data->help_locationID)
+	    XtFree((char *)help_data->help_locationID);
+	XtFree((char *)help_data);
+    }
+
+    XtDestroyWidget(widget);
+}
+
+
+/* 
+ * Get handle to Action2 button.
+ */
+Widget
+dtb_MessageBoxGetActionButton(
+    Widget	msg_dlg,
+    DTB_BUTTON	which_btn
+)
+{
+    int			i, numChildren = 0;
+    WidgetList		children = NULL;
+    Widget		action_button = NULL;
+    int			button = -1;
+    Boolean		Found = False;
+
+    XtVaGetValues(msg_dlg,
+			XmNnumChildren, &numChildren,
+			XmNchildren, &children,
+			NULL);
+    for (i = 0; i < numChildren && !Found; i++)
+    {
+	XtVaGetValues(children[i], XmNuserData, &button, NULL);
+	if (which_btn == (DTB_BUTTON) button)
+	{
+	    Found = True;
+	    action_button = children[i];
+	}
+    }
+    return (action_button);
+}
+
+
+/*
+ * Use this routine to post a non-modal message. It should
+ * be used to post Information and Working messages.
+ */
+void
+dtb_show_message(
+    Widget		parent,
+    DtbMessageData	mbr,
+    XmString		override_msg,
+    DtbObjectHelpData	override_help
+)
+{
+    DtbObjectHelpData	help_data_copy = (DtbObjectHelpData)NULL;
+    Widget      	msg_dlg = (Widget) NULL, 
+			action_btn = (Widget) NULL;
+
+    if (override_help != (DtbObjectHelpData) NULL)
+    {
+	help_data_copy = (DtbObjectHelpData)XtMalloc(sizeof(DtbObjectHelpDataRec));
+
+	help_data_copy->help_text = override_help->help_text ? 
+		XtNewString(override_help->help_text) : 
+		NULL;
+	help_data_copy->help_volume = override_help->help_volume ? 
+		XtNewString(override_help->help_volume) :
+		NULL;
+	help_data_copy->help_locationID = override_help->help_locationID ?
+		XtNewString(override_help->help_locationID) :
+		NULL;
+    }
+
+    msg_dlg = dtb_create_message_dlg(parent, 
+		mbr, override_msg, help_data_copy);
+
+    if (msg_dlg == (Widget) NULL)
+	return;
+
+    /* Add Callbacks if necessary */
+    if (mbr->action1_callback != (XtCallbackProc) NULL)
+        XtAddCallback(msg_dlg, XmNokCallback, mbr->action1_callback, NULL);
+    if (mbr->cancel_callback != (XtCallbackProc) NULL)
+        XtAddCallback(msg_dlg, XmNcancelCallback, mbr->cancel_callback, NULL);
+    if (mbr->action2_callback != (XtCallbackProc) NULL)
+    {
+	action_btn = dtb_MessageBoxGetActionButton(msg_dlg, DTB_ACTION2_BUTTON);
+	if (action_btn != NULL)
+            XtAddCallback(action_btn, XmNactivateCallback,
+			  mbr->action2_callback, NULL);
+    }
+    if (mbr->action3_callback != (XtCallbackProc) NULL)
+    {
+        action_btn = dtb_MessageBoxGetActionButton(msg_dlg, DTB_ACTION3_BUTTON);        if (action_btn != NULL)
+            XtAddCallback(action_btn, XmNactivateCallback,
+                          mbr->action3_callback, NULL);
+    }
+
+    XtManageChild(msg_dlg);
+    XRaiseWindow(XtDisplay(msg_dlg), XtWindow(XtParent(msg_dlg)));
+}
+
+
+/*
+ * Use this routine to post a modal message.
+ * It should be used to post Error, Question, and Warning messages.
+ * It returns the information on which button was pressed. A switch
+ * statement can then be done to process the answer.
+ */
+DTB_MODAL_ANSWER
+dtb_show_modal_message(
+    Widget		parent,
+    DtbMessageData	mbr,
+    XmString		override_msg,
+    DtbObjectHelpData	override_help,
+    Widget         	*modal_dlg_pane_out_ptr
+)                                 
+{
+    XtAppContext		app;
+    Widget			modal_dlg_pane = (Widget) NULL;
+    Widget			action2_button = (Widget) NULL;
+    Widget			action3_button = (Widget) NULL;
+    DtbObjectHelpData		help_data_copy = (DtbObjectHelpData)NULL;
+    DTB_MODAL_ANSWER		answer = DTB_ANSWER_NONE;
+    XtCallbackRec ok_callback[] = {
+            {(XtCallbackProc)modal_dlgCB, (XtPointer) DTB_ANSWER_ACTION1},
+            {(XtCallbackProc) NULL, (XtPointer) NULL}
+    };
+    XtCallbackRec cancel_callback[] = {
+            {(XtCallbackProc)modal_dlgCB, (XtPointer) DTB_ANSWER_CANCEL},
+            {(XtCallbackProc) NULL, (XtPointer) NULL}
+    };
+
+    if (override_help != (DtbObjectHelpData) NULL)
+    {
+	help_data_copy = (DtbObjectHelpData)XtMalloc(sizeof(DtbObjectHelpDataRec));
+
+	help_data_copy->help_text = override_help->help_text ? 
+		XtNewString(override_help->help_text) : 
+		NULL;
+	help_data_copy->help_volume = override_help->help_volume ? 
+		XtNewString(override_help->help_volume) :
+		NULL;
+	help_data_copy->help_locationID = override_help->help_locationID ?
+		XtNewString(override_help->help_locationID) :
+		NULL;
+    }
+
+    modal_dlg_pane = dtb_create_message_dlg(parent, mbr, 
+				override_msg, help_data_copy);
+
+    if (modal_dlg_pane == (Widget) NULL)
+	return (answer);
+ 
+    XtVaSetValues(modal_dlg_pane,
+                XmNdialogStyle,    XmDIALOG_FULL_APPLICATION_MODAL,
+                XmNokCallback,     &ok_callback,
+                XmNcancelCallback, &cancel_callback,
+                XmNuserData,       &answer,
+                NULL);
+
+    action2_button = dtb_MessageBoxGetActionButton(modal_dlg_pane,
+				DTB_ACTION2_BUTTON);
+    if (action2_button != (Widget) NULL)
+    {
+	XtVaSetValues(action2_button,
+                        XmNuserData, (XtPointer) &answer,
+                        NULL);
+        XtAddCallback(action2_button,
+                        XmNactivateCallback, modal_dlgCB,
+                        (XtPointer) DTB_ANSWER_ACTION2);
+    }
+
+    action3_button = dtb_MessageBoxGetActionButton(modal_dlg_pane,
+                                DTB_ACTION3_BUTTON);
+    if (action3_button != (Widget) NULL)
+    {
+        XtVaSetValues(action3_button,
+                        XmNuserData, (XtPointer) &answer,
+                        NULL);
+        XtAddCallback(action3_button,
+                        XmNactivateCallback, modal_dlgCB,
+                        (XtPointer) DTB_ANSWER_ACTION3);
+    }
+
+    /* Popup Modal MessageDialog and wait for answer */
+    XtManageChild(modal_dlg_pane);
+    XRaiseWindow(XtDisplay(modal_dlg_pane), XtWindow(XtParent(modal_dlg_pane)));
+
+    app = XtDisplayToApplicationContext(XtDisplay(modal_dlg_pane));
+    while (answer == DTB_ANSWER_NONE)
+        XtAppProcessEvent(app, XtIMAll);
+ 
+    if (modal_dlg_pane_out_ptr != NULL)
+    {
+        (*modal_dlg_pane_out_ptr) = modal_dlg_pane;
+    }
+    return(answer);
+}
+
+
+/*
+ * This is the activateCallback for the MessageBox buttons.
+ * It returns the button which was pressed.
+ */
+static void
+modal_dlgCB(
+    Widget      widget,
+    XtPointer   client_data,
+    XtPointer   call_data
+)
+{
+    DTB_MODAL_ANSWER     op = (DTB_MODAL_ANSWER) client_data;
+    DTB_MODAL_ANSWER     *answerp = NULL;
+ 
+    XtVaGetValues(widget, XmNuserData, &answerp, NULL);
+ 
+    /* Will cause Modal dialog to return */
+    *answerp = op;
+}
+
 
 /*
  * This function will center all the passed form's children.

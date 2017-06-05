@@ -14,6 +14,7 @@
 #include <Xm/Form.h>
 #include <Xm/PanedW.h>
 #include <Xm/RowColumn.h>
+#include <Xm/Separator.h>
 #include <Xm/Label.h>
 #include <Xm/Scale.h>
 #include <Xm/PushB.h>
@@ -60,6 +61,10 @@ static int dtb_settings_farnsworth_create(
     DtbSettingsSpeedDialogInfo	instance,
     Widget	parent
 );
+static int dtb_settings_separator2_create(
+    DtbSettingsSpeedDialogInfo	instance,
+    Widget	parent
+);
 static int dtb_settings_speed_ok_create(
     DtbSettingsSpeedDialogInfo	instance,
     Widget	parent
@@ -77,6 +82,10 @@ static int dtb_settings_controlpane2_create(
     Widget	parent
 );
 static int dtb_settings_code_box_create(
+    DtbSettingsCodeDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_settings_separator_create(
     DtbSettingsCodeDialogInfo	instance,
     Widget	parent
 );
@@ -119,6 +128,8 @@ dtb_settings_speed_dialog_initialize(
     dtb_settings_speed_create(instance,
         instance->controlpane);
     dtb_settings_farnsworth_create(instance,
+        instance->controlpane);
+    dtb_settings_separator2_create(instance,
         instance->controlpane);
     dtb_settings_speed_ok_create(instance,
         instance->dialog_button_panel);
@@ -228,6 +239,8 @@ dtb_settings_code_dialog_initialize(
     dtb_settings_controlpane2_create(instance,
         instance->codeDialog_form);
     dtb_settings_code_box_create(instance,
+        instance->controlpane2);
+    dtb_settings_separator_create(instance,
         instance->controlpane2);
     dtb_settings_code_ok_create(instance,
         instance->dialog_button_panel2);
@@ -382,7 +395,7 @@ dtb_settings_speed_dialog_create(
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
                 XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 166,
+                XmNheight, 167,
                 XmNwidth, 511,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->speedDialog_panedwin, "white"),
                 NULL);
@@ -535,7 +548,7 @@ dtb_settings_controlpane_create(
                 XmNresizePolicy, XmRESIZE_GROW,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNheight, 166,
+                XmNheight, 167,
                 XmNwidth, 511,
                 XmNy, 18,
                 XmNx, 22,
@@ -688,6 +701,40 @@ dtb_settings_farnsworth_create(
                 NULL);
     }
     if (instance->farnsworth == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_settings_separator2_create(
+    DtbSettingsSpeedDialogInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->separator2 == NULL) {
+        instance->separator2 =
+            XtVaCreateWidget("separator2",
+                xmSeparatorWidgetClass,
+                parent,
+                XmNbottomOffset, 0,
+                XmNbottomAttachment, XmATTACH_FORM,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopAttachment, XmATTACH_NONE,
+                XmNseparatorType, XmSHADOW_ETCHED_IN,
+                XmNorientation, XmHORIZONTAL,
+                XmNheight, 10,
+                XmNy, 157,
+                XmNx, 70,
+                NULL);
+    }
+    if (instance->separator2 == NULL)
         return -1;
 
     return 0;
@@ -939,6 +986,40 @@ dtb_settings_code_box_create(
     instance->codeBox_items.International_item = codeBox_choice_items[0];
     instance->codeBox_items.items_item = codeBox_choice_items[1];
     	dtb_center(instance->codeBox_rowcolumn, DTB_CENTER_POSITION_BOTH);
+    return 0;
+}
+
+
+
+static int 
+dtb_settings_separator_create(
+    DtbSettingsCodeDialogInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->separator == NULL) {
+        instance->separator =
+            XtVaCreateWidget("separator",
+                xmSeparatorWidgetClass,
+                parent,
+                XmNbottomOffset, 0,
+                XmNbottomAttachment, XmATTACH_FORM,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopAttachment, XmATTACH_NONE,
+                XmNseparatorType, XmSHADOW_ETCHED_IN,
+                XmNorientation, XmHORIZONTAL,
+                XmNheight, 10,
+                XmNy, 105,
+                XmNx, 30,
+                NULL);
+    }
+    if (instance->separator == NULL)
+        return -1;
+
     return 0;
 }
 

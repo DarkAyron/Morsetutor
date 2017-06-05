@@ -1,6 +1,6 @@
 diff -Naru a/Morsetutor/dtb_utils.c b/Morsetutor/dtb_utils.c
---- a/Morsetutor/dtb_utils.c	2017-06-03 21:11:08.607479373 +0000
-+++ b/Morsetutor/dtb_utils.c	2017-06-03 17:20:19.907700437 +0000
+--- a/Morsetutor/dtb_utils.c	2017-06-05 17:27:38.135785780 +0000
++++ b/Morsetutor/dtb_utils.c	2017-06-05 17:33:45.955779904 +0000
 @@ -21,11 +21,6 @@
  #include <Xm/PushB.h>
  #include <Xm/SashP.h>
@@ -47,7 +47,7 @@ diff -Naru a/Morsetutor/dtb_utils.c b/Morsetutor/dtb_utils.c
  /*
   * This structure keeps track of widget/menu pairs
   */
-@@ -251,58 +219,6 @@
+@@ -264,58 +232,6 @@
  			XtPointer	callData
  );
  
@@ -106,7 +106,7 @@ diff -Naru a/Morsetutor/dtb_utils.c b/Morsetutor/dtb_utils.c
  /*
   * Variable for storing top level widget
   */
-@@ -318,13 +234,6 @@
+@@ -331,13 +247,6 @@
   */
  static DtbMenuRef	popupMenus = NULL;
  static int	numPopupMenus = 0;
@@ -120,7 +120,7 @@ diff -Naru a/Morsetutor/dtb_utils.c b/Morsetutor/dtb_utils.c
  
  /*
   * Directory where the binary for this process whate loaded from
-@@ -909,481 +818,6 @@
+@@ -922,481 +831,6 @@
      return(dtb_save_command_str); 
  }
  
@@ -600,9 +600,54 @@ diff -Naru a/Morsetutor/dtb_utils.c b/Morsetutor/dtb_utils.c
 -
 -
  /*
-  * This function will center all the passed form's children.
-  * The type of centering depends on what 'type' is.
-@@ -3583,364 +3017,3 @@
+  * Create a Message Dialog.
+  */
+@@ -1651,21 +1085,6 @@
+             XtAddCallback(action_btn, XmNactivateCallback,
+                           mbr->action3_callback, NULL);
+     }
+-    if (mbr->help_button)
+-    {
+-	if (help_data_copy != (DtbObjectHelpData) NULL)
+-	{
+-            XtAddCallback(msg_dlg,
+-                        XmNhelpCallback, dtb_help_dispatch,
+-                        (XtPointer) help_data_copy);
+-	}
+-	else if (mbr->help_data.help_text != (char *) NULL)
+-	{
+-	    XtAddCallback(msg_dlg, 
+-			XmNhelpCallback, dtb_help_dispatch,
+-			(XtPointer) &(mbr->help_data));
+-	}
+-    }
+ 
+     XtManageChild(msg_dlg);
+     XRaiseWindow(XtDisplay(msg_dlg), XtWindow(XtParent(msg_dlg)));
+@@ -1754,22 +1173,6 @@
+                         (XtPointer) DTB_ANSWER_ACTION3);
+     }
+ 
+-    if (mbr->help_button) 
+-    { 
+-        if (help_data_copy != (DtbObjectHelpData) NULL)
+-        {
+-            XtAddCallback(modal_dlg_pane, 
+-                        XmNhelpCallback, dtb_help_dispatch, 
+-                        (XtPointer) help_data_copy); 
+-	}
+-        else if (mbr->help_data.help_text != (char *) NULL) 
+-        { 
+-            XtAddCallback(modal_dlg_pane, 
+-                        XmNhelpCallback, dtb_help_dispatch, 
+-                        (XtPointer) &(mbr->help_data)); 
+-        }
+-    }   
+-
+     /* Popup Modal MessageDialog and wait for answer */
+     XtManageChild(modal_dlg_pane);
+     XRaiseWindow(XtDisplay(modal_dlg_pane), XtWindow(XtParent(modal_dlg_pane)));
+@@ -4006,364 +3409,3 @@
  }
  
  
@@ -968,8 +1013,8 @@ diff -Naru a/Morsetutor/dtb_utils.c b/Morsetutor/dtb_utils.c
 -
 -
 diff -Naru a/Morsetutor/dtb_utils.h b/Morsetutor/dtb_utils.h
---- a/Morsetutor/dtb_utils.h	2017-06-03 21:11:08.607479373 +0000
-+++ b/Morsetutor/dtb_utils.h	2017-06-03 17:04:22.995715712 +0000
+--- a/Morsetutor/dtb_utils.h	2017-06-05 17:27:38.135785780 +0000
++++ b/Morsetutor/dtb_utils.h	2017-06-05 17:28:08.375785295 +0000
 @@ -12,7 +12,6 @@
  #include <stdlib.h>
  #include <X11/Intrinsic.h>
@@ -1048,7 +1093,7 @@ diff -Naru a/Morsetutor/dtb_utils.h b/Morsetutor/dtb_utils.h
   * Types of group layout
   */
  typedef enum {
-@@ -228,52 +164,7 @@
+@@ -250,52 +186,7 @@
  );
  char *  dtb_get_command();
  String dtb_get_exe_dir(void);
@@ -1101,23 +1146,9 @@ diff -Naru a/Morsetutor/dtb_utils.h b/Morsetutor/dtb_utils.h
  void dtb_children_center(
      Widget		form,
      DTB_CENTERING_TYPES	type
-@@ -301,13 +192,6 @@
-     int			hoffset,
-     int			voffset
- );
--void dtb_session_save(
--    Widget 	widget,
--    XtPointer 	clientData,
--    XtPointer 	callData
--);
--DtbClientSessionSaveCB dtb_get_client_session_saveCB();
--
- 
- #define dtb_cvt_string_to_pixel(parent, str) \
-         ((Pixel)dtb_cvt_resource_from_string( \
 diff -Naru a/Morsetutor/morsetutor.c b/Morsetutor/morsetutor.c
---- a/Morsetutor/morsetutor.c	2017-06-03 21:11:08.607479373 +0000
-+++ b/Morsetutor/morsetutor.c	2017-06-03 17:16:42.527703907 +0000
+--- a/Morsetutor/morsetutor.c	2017-06-05 17:27:38.135785780 +0000
++++ b/Morsetutor/morsetutor.c	2017-06-05 17:28:08.375785295 +0000
 @@ -26,9 +26,6 @@
  #include <Xm/Xm.h>
  #include <Xm/MwmUtil.h>

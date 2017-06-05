@@ -14,9 +14,10 @@
 #include <Xm/Form.h>
 #include <Xm/PanedW.h>
 #include <Xm/RowColumn.h>
+#include <Xm/Separator.h>
 #include <Xm/Label.h>
-#include <Xm/PushB.h>
 #include <Xm/TextF.h>
+#include <Xm/PushB.h>
 #include "dtb_utils.h"
 #include "morsetutor.h"
 #include "connect_ui.h"
@@ -26,6 +27,8 @@ DtbConnectConnectInfoRec	dtb_connect_connect =
 {
     False	 /* initialized */
 };
+DtbMessageDataRec	dtb_connect_netunreach;
+DtbMessageDataRec	dtb_connect_noderesponse;
 
 /*
  * Widget create procedure decls
@@ -47,6 +50,10 @@ static int dtb_connect_network_box_create(
     Widget	parent
 );
 static int dtb_connect_node_box_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_separator_create(
     DtbConnectConnectInfo	instance,
     Widget	parent
 );
@@ -94,6 +101,8 @@ dtb_connect_connect_initialize(
         instance->controlpane);
     dtb_connect_node_box_create(instance,
         instance->controlpane);
+    dtb_connect_separator_create(instance,
+        instance->controlpane);
     dtb_connect_connect_ok_create(instance,
         instance->dialog_button_panel);
     dtb_connect_connect_rescan_create(instance,
@@ -111,6 +120,10 @@ dtb_connect_connect_initialize(
     
     XtVaSetValues(instance->nodeBox_rowcolumn,
         XmNtopWidget, instance->networkBox_rowcolumn,
+        NULL);
+    
+    XtVaSetValues(instance->separator,
+        XmNtopWidget, instance->nodeBox_rowcolumn,
         NULL);
     
     /*
@@ -136,9 +149,6 @@ dtb_connect_connect_initialize(
     /*
      * Manage the tree, from the bottom up.
      */
-    XtVaGetValues(instance->networkBox_menu,
-        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
-    XtManageChildren(children, numChildren);
     XtVaGetValues(instance->networkBox_rowcolumn,
         XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
     XtManageChildren(children, numChildren);
@@ -167,9 +177,12 @@ dtb_connect_connect_initialize(
     /*
      * Add User and Connection callbacks
      */
-    	XtAddCallback(instance->connect_ok,
-		XmNactivateCallback, connectOk,
+    	XtAddCallback(instance->connect,
+		XmNpopupCallback, doRescan,
     		(XtPointer)&(*instance));
+	XtAddCallback(instance->connect_ok,
+		XmNactivateCallback, connectOk,
+		(XtPointer)&(*instance));
 	XtAddCallback(instance->connect_rescan,
 		XmNactivateCallback, doRescan,
 		(XtPointer)&(*instance));
@@ -177,6 +190,62 @@ dtb_connect_connect_initialize(
 		XmNactivateCallback, connect_connect_cancel_CB1,
 		(XtPointer)&(*instance));
 return 0;
+}
+
+int 
+dtb_connect_netunreach_initialize(DtbMessageData instance)
+{
+    if (instance->initialized)
+    {
+        return 0;
+    }
+    instance->initialized = True;
+
+    instance->type = XmDIALOG_ERROR;
+    instance->title = XmStringCreateLocalized("Connect");
+    instance->message = XmStringCreateLocalized("Network is unreachable.");
+    instance->action1_label = (XmString) NULL;
+    instance->action1_callback = (XtCallbackProc) NULL;
+    instance->action2_label = (XmString) NULL;
+    instance->action2_callback = (XtCallbackProc) NULL;
+    instance->action3_label = (XmString) NULL;
+    instance->action3_callback = (XtCallbackProc) NULL;
+    instance->cancel_button = True;
+    instance->cancel_callback = (XtCallbackProc) NULL;
+    instance->help_button = False;
+    instance->help_data.help_text = (char *) NULL;
+    instance->help_data.help_volume = "";
+    instance->help_data.help_locationID = "";
+    instance->default_button = DTB_CANCEL_BUTTON;
+    return 0;
+}
+
+int 
+dtb_connect_noderesponse_initialize(DtbMessageData instance)
+{
+    if (instance->initialized)
+    {
+        return 0;
+    }
+    instance->initialized = True;
+
+    instance->type = XmDIALOG_ERROR;
+    instance->title = XmStringCreateLocalized("Connect");
+    instance->message = XmStringCreateLocalized("Node does not respond.");
+    instance->action1_label = (XmString) NULL;
+    instance->action1_callback = (XtCallbackProc) NULL;
+    instance->action2_label = XmStringCreateLocalized("Retry");
+    instance->action2_callback = (XtCallbackProc) NULL;
+    instance->action3_label = (XmString) NULL;
+    instance->action3_callback = (XtCallbackProc) NULL;
+    instance->cancel_button = True;
+    instance->cancel_callback = (XtCallbackProc) NULL;
+    instance->help_button = True;
+    instance->help_data.help_text = (char *) NULL;
+    instance->help_data.help_volume = "";
+    instance->help_data.help_locationID = "";
+    instance->default_button = DTB_CANCEL_BUTTON;
+    return 0;
 }
 
 
@@ -256,8 +325,8 @@ dtb_connect_connect_create(
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
                 XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 91,
-                XmNwidth, 380,
+                XmNheight, 95,
+                XmNwidth, 381,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->connect_panedwin, "white"),
                 NULL);
     }
@@ -321,8 +390,8 @@ dtb_connect_controlpane_create(
                 XmNresizePolicy, XmRESIZE_GROW,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNheight, 91,
-                XmNwidth, 380,
+                XmNheight, 95,
+                XmNwidth, 381,
                 XmNy, 40,
                 XmNx, 59,
                 NULL);
@@ -344,20 +413,6 @@ dtb_connect_network_box_create(
     XmString	label_xmstring = NULL;
     Arg	args[21];	/* need 16 args (add 5 to be safe) */
     int	n = 0;
-    Widget	networkBox_menu_items[1];
-    static String	networkBox_menu_names[] =
-    {
-        "items_item"
-    };
-    static String	networkBox_menu_strings[] =
-    {
-        "00000000"
-    };
-    int	i = 0;
-    Boolean	networkBox_menu_selected[] =
-    {
-        True
-    };
     
     if (instance->networkBox_rowcolumn == NULL) {
         instance->networkBox_rowcolumn =
@@ -421,18 +476,6 @@ dtb_connect_network_box_create(
     if (instance->networkBox == NULL)
         return -1;
 
-    for (i = 0; i < XtNumber(networkBox_menu_strings); i++)
-    {
-        label_xmstring = XmStringCreateLocalized(networkBox_menu_strings[i]);
-        networkBox_menu_items[i] = XtVaCreateWidget(networkBox_menu_names[i],
-            xmPushButtonWidgetClass,
-            instance->networkBox_menu,
-            XmNlabelString, label_xmstring,
-            NULL);
-        XmStringFree(label_xmstring);
-        label_xmstring = NULL;
-    }
-    instance->networkBox_items.items_item = networkBox_menu_items[0];
     return 0;
 }
 
@@ -465,8 +508,8 @@ dtb_connect_node_box_create(
                 XmNmarginHeight, 0,
                 XmNentryAlignment, XmALIGNMENT_END,
                 XmNorientation, XmHORIZONTAL,
-                XmNy, 71,
-                XmNx, 47,
+                XmNy, 51,
+                XmNx, 5,
                 NULL);
     }
     if (instance->nodeBox_rowcolumn == NULL)
@@ -491,12 +534,46 @@ dtb_connect_node_box_create(
         XtSetArg(args[n], XmNmaxLength, 80);  ++n;
         XtSetArg(args[n], XmNeditable, True);  ++n;
         XtSetArg(args[n], XmNcursorPositionVisible, True);  ++n;
-        XtSetArg(args[n], XmNcolumns, 8);  ++n;
+        XtSetArg(args[n], XmNcolumns, 12);  ++n;
         instance->nodeBox =
             XmCreateTextField(instance->nodeBox_rowcolumn,
                 "nodeBox", args, n);
     }
     if (instance->nodeBox == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_separator_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->separator == NULL) {
+        instance->separator =
+            XtVaCreateWidget("separator",
+                xmSeparatorWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_WIDGET,
+                XmNseparatorType, XmSHADOW_ETCHED_IN,
+                XmNorientation, XmHORIZONTAL,
+                XmNheight, 10,
+                XmNy, 79,
+                XmNx, 21,
+                NULL);
+    }
+    if (instance->separator == NULL)
         return -1;
 
     return 0;

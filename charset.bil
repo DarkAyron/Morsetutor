@@ -6,7 +6,7 @@
 (
 	:type			:dialog
 	:width			542
-	:height			220
+	:height			227
 	:bg-color		"white"
 	:label			"Charset"
 	:resizable		:false
@@ -24,7 +24,7 @@
 	:x			36
 	:y			34
 	:width			542
-	:height			220
+	:height			227
 	:visible		:true
 	:active			:true
 	:border-frame		:none
@@ -37,6 +37,7 @@
 		lessonBox
 		separator
 		stageBox
+		separator2
 	)
 )
 :element charBox
@@ -948,6 +949,19 @@
 	:label			"all characters"
 	:active			:true
 	:selected		:false
+)
+:element separator2
+(
+	:type			:separator
+	:line-style		:etched-in
+	:orientation		:horizontal
+	:x			172
+	:y			215
+	:height			10
+	:visible		:true
+	:north-attachment	(:obj lessonBox 5)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
 )
 :element dialog_button_panel
 (

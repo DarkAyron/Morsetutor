@@ -87,6 +87,28 @@ typedef enum {
 } DTB_ALIGN_TYPES;
 
 /*
+ * Structure to store values for Messages
+ */
+typedef struct {
+    Boolean              initialized;
+    unsigned char        type;
+    XmString             title;
+    XmString             message;
+    XmString             action1_label;
+    XtCallbackProc       action1_callback;
+    XmString             action2_label;
+    XtCallbackProc       action2_callback;
+    XmString             action3_label;
+    XtCallbackProc       action3_callback;
+    Boolean              cancel_button;
+    XtCallbackProc       cancel_callback;
+    Boolean              help_button;
+    DtbObjectHelpDataRec help_data;
+    DTB_BUTTON           default_button;
+} DtbMessageDataRec, *DtbMessageData;
+
+
+/*
  * Structure to store attributes of a group
  */
 typedef struct {
@@ -192,6 +214,36 @@ void dtb_children_align(
     int			hoffset,
     int			voffset
 );
+void dtb_session_save(
+    Widget 	widget,
+    XtPointer 	clientData,
+    XtPointer 	callData
+);
+DtbClientSessionSaveCB dtb_get_client_session_saveCB();
+Widget dtb_create_message_dlg(
+    Widget		parent,
+    DtbMessageData	mbr,
+    XmString		override_msg,
+    DtbObjectHelpData	override_help
+);
+Widget dtb_MessageBoxGetActionButton(
+    Widget	msg_dlg,
+    DTB_BUTTON	which_btn
+);
+void dtb_show_message(
+    Widget		parent,
+    DtbMessageData	mbr,
+    XmString		override_msg,
+    DtbObjectHelpData	override_help
+);
+DTB_MODAL_ANSWER dtb_show_modal_message(
+    Widget		parent,
+    DtbMessageData	mbr,
+    XmString		override_msg,
+    DtbObjectHelpData	override_help,
+    Widget         	*modal_dlg_pane_out_ptr
+);
+
 
 #define dtb_cvt_string_to_pixel(parent, str) \
         ((Pixel)dtb_cvt_resource_from_string( \

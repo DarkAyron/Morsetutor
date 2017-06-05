@@ -34,7 +34,14 @@
  ***
  *** Add include files, types, macros, externs, and user functions here.
  ***/
+#include <Xm/PushB.h>
 
+#include "network.h"
+
+static Widget networkBoxItems[256];
+static int nNetworkBoxItems = 0;
+
+int connect_ScanNetworks();
 /*** DTB_USER_CODE_END
  ***
  *** End of user code section
@@ -94,6 +101,7 @@ doRescan(
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	connect_ScanNetworks();
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -106,7 +114,48 @@ doRescan(
  ***
  *** Add new functions here, or at the top of the file.
  ***/
+int connect_ScanNetworks()
+{
+	XmString netnumString;
+	int nNetworks;
+	Cardinal n;
+	Arg args[1];
+	int networks[256];
+	uint32_t defaultNet = 0;
 
+	Widget wNetworks[256];
+	WidgetList children;
+
+	for (n = 0; n < nNetworkBoxItems; n++) {
+		XtDestroyWidget(networkBoxItems[n]);
+	}
+
+	nNetworks = getAvailableNetworks(networks, 256, &defaultNet);
+	if (nNetworks < 0)
+		return nNetworks;
+
+	for (n = 0; n < nNetworks; n++) {
+		char str[9];
+		sprintf(str, "%x", networks[n]);
+		netnumString = XmStringCreateLocalized(str);
+		networkBoxItems[n] = XtVaCreateWidget(str,
+			xmPushButtonWidgetClass,
+			dtb_connect_connect.networkBox_menu,
+			XmNlabelString, netnumString,
+			NULL);
+		XmStringFree(netnumString);
+	}
+	nNetworkBoxItems = nNetworks;
+	XtVaGetValues(dtb_connect_connect.networkBox_menu,
+			XmNchildren, &children, XmNnumChildren, &n, NULL);
+	XtManageChildren(children, n);
+
+	n = 0;
+	if (defaultNet >= 0) {
+		XtVaSetValues(dtb_connect_connect.networkBox, XmNmenuHistory, networkBoxItems[defaultNet], NULL);
+	}
+	return nNetworks;
+}
 /*** DTB_USER_CODE_END
  ***
  *** End of user code section

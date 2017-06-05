@@ -232,6 +232,7 @@ typedef struct
     Widget	stageBox;
     CharsetStageBoxItemsRec	stageBox_items;
     
+    Widget	separator2;
     Widget	charset_ok;
     Widget	charset_reset;
     Widget	charset_cancel;

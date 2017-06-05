@@ -59,6 +59,10 @@ static int dtb_charset_stage_box_create(
     DtbCharsetCharsetDialogInfo	instance,
     Widget	parent
 );
+static int dtb_charset_separator2_create(
+    DtbCharsetCharsetDialogInfo	instance,
+    Widget	parent
+);
 static int dtb_charset_charset_ok_create(
     DtbCharsetCharsetDialogInfo	instance,
     Widget	parent
@@ -107,6 +111,8 @@ dtb_charset_charset_dialog_initialize(
         instance->controlpane);
     dtb_charset_stage_box_create(instance,
         instance->controlpane);
+    dtb_charset_separator2_create(instance,
+        instance->controlpane);
     dtb_charset_charset_ok_create(instance,
         instance->dialog_button_panel);
     dtb_charset_charset_reset_create(instance,
@@ -133,6 +139,10 @@ dtb_charset_charset_dialog_initialize(
     XtVaSetValues(instance->stageBox_rowcolumn,
         XmNleftWidget, instance->lessonBox_rowcolumn,
         XmNtopWidget, instance->separator,
+        NULL);
+    
+    XtVaSetValues(instance->separator2,
+        XmNtopWidget, instance->lessonBox_rowcolumn,
         NULL);
     
     /*
@@ -374,7 +384,7 @@ dtb_charset_charset_dialog_create(
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
                 XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 220,
+                XmNheight, 227,
                 XmNwidth, 542,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->charsetDialog_panedwin, "white"),
                 NULL);
@@ -439,7 +449,7 @@ dtb_charset_controlpane_create(
                 XmNresizePolicy, XmRESIZE_GROW,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNheight, 220,
+                XmNheight, 227,
                 XmNwidth, 542,
                 XmNy, 34,
                 XmNx, 36,
@@ -870,6 +880,40 @@ dtb_charset_stage_box_create(
     instance->stageBox_items.only_new = stageBox_menu_items[0];
     instance->stageBox_items.one = stageBox_menu_items[1];
     instance->stageBox_items.all = stageBox_menu_items[2];
+    return 0;
+}
+
+
+
+static int 
+dtb_charset_separator2_create(
+    DtbCharsetCharsetDialogInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->separator2 == NULL) {
+        instance->separator2 =
+            XtVaCreateWidget("separator2",
+                xmSeparatorWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_WIDGET,
+                XmNseparatorType, XmSHADOW_ETCHED_IN,
+                XmNorientation, XmHORIZONTAL,
+                XmNheight, 10,
+                XmNy, 215,
+                XmNx, 172,
+                NULL);
+    }
+    if (instance->separator2 == NULL)
+        return -1;
+
     return 0;
 }
 

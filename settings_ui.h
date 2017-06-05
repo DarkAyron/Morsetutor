@@ -41,6 +41,7 @@ typedef struct
     Widget	farnsworth_label;
     Widget	farnsworth;
     
+    Widget	separator2;
     Widget	speed_ok;
     Widget	speed_cancel;
 } DtbSettingsSpeedDialogInfoRec, *DtbSettingsSpeedDialogInfo;
@@ -70,6 +71,7 @@ typedef struct
     Widget	codeBox;
     SettingsCodeBoxItemsRec	codeBox_items;
     
+    Widget	separator;
     Widget	code_ok;
     Widget	code_cancel;
 } DtbSettingsCodeDialogInfoRec, *DtbSettingsCodeDialogInfo;
