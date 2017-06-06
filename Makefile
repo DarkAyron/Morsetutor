@@ -79,7 +79,7 @@ OBJS = \
 	charset_stubs.o \
 	connect_ui.o \
 	connect_stubs.o \
-	interface.o
+	network.o
 
 .NO_PARALLEL: $(TARGETS.h) $(TARGETS.h.merged) $(TARGETS.c) $(TARGETS.c.merged)
 

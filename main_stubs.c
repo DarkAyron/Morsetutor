@@ -35,6 +35,8 @@
  *** Add include files, types, macros, externs, and user functions here.
  ***/
 #include "connect_ui.h"
+#include "settings_ui.h"
+#include "charset_ui.h"
 
 /*** DTB_USER_CODE_END
  ***
@@ -104,7 +106,6 @@ doConnect(
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
 
 	DtbConnectConnectInfo dtbTarget = (DtbConnectConnectInfo)&dtb_connect_connect;
-	DtbConnectConnectInfo instance = dtbTarget;	/* obsolete */
 
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
@@ -116,8 +117,8 @@ doConnect(
 	{
 		dtb_connect_connect_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
 	}
-	XtVaSetValues(instance->connect_shellform, XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL, NULL);
-	XtManageChild(instance->connect_shellform);
+	XtVaSetValues(dtbTarget->connect_shellform, XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL, NULL);
+	XtManageChild(dtbTarget->connect_shellform);
 
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
@@ -191,9 +192,19 @@ showSpeed(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	DtbSettingsSpeedDialogInfo dtbTarget = (DtbSettingsSpeedDialogInfo)&dtb_settings_speed_dialog;
+
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+
+	if (!(dtbTarget->initialized))
+	{
+		dtb_settings_speed_dialog_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+	}
+	XtVaSetValues(dtbTarget->speedDialog_shellform, XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL, NULL);
+	XtManageChild(dtbTarget->speedDialog_shellform);
+
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -206,9 +217,19 @@ showCharset(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	DtbCharsetCharsetDialogInfo dtbTarget = (DtbCharsetCharsetDialogInfo)&dtb_charset_charset_dialog;
+
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+
+	if (!(dtbTarget->initialized))
+	{
+		dtb_charset_charset_dialog_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+	}
+	XtVaSetValues(dtbTarget->charsetDialog_shellform, XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL, NULL);
+	XtManageChild(dtbTarget->charsetDialog_shellform);
+
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -221,9 +242,18 @@ showCode(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	DtbSettingsCodeDialogInfo dtbTarget = (DtbSettingsCodeDialogInfo)&dtb_settings_code_dialog;
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+
+	if (!(dtbTarget->initialized))
+	{
+		dtb_settings_code_dialog_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+	}
+	XtVaSetValues(dtbTarget->codeDialog_shellform, XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL, NULL);
+	XtManageChild(dtbTarget->codeDialog_shellform);
+
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
