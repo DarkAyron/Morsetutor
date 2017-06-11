@@ -199,9 +199,12 @@ dtb_settings_speed_dialog_initialize(
     /*
      * Add User and Connection callbacks
      */
-    	XtAddCallback(instance->speed_ok,
-		XmNactivateCallback, settings_speed_ok_CB1,
+    	XtAddCallback(instance->speedDialog,
+		XmNpopupCallback, initSpeedDialog,
     		(XtPointer)&(*instance));
+	XtAddCallback(instance->speed_ok,
+		XmNactivateCallback, settings_speed_ok_CB1,
+		(XtPointer)&(*instance));
 	XtAddCallback(instance->speed_ok,
 		XmNactivateCallback, setSpeed,
 		(XtPointer)&(*instance));
@@ -306,9 +309,12 @@ dtb_settings_code_dialog_initialize(
     /*
      * Add User and Connection callbacks
      */
-    	XtAddCallback(instance->code_ok,
-		XmNactivateCallback, settings_code_ok_CB1,
+    	XtAddCallback(instance->codeDialog,
+		XmNpopupCallback, initCodeDialog,
     		(XtPointer)&(*instance));
+	XtAddCallback(instance->code_ok,
+		XmNactivateCallback, settings_code_ok_CB1,
+		(XtPointer)&(*instance));
 	XtAddCallback(instance->code_ok,
 		XmNactivateCallback, setCode,
 		(XtPointer)&(*instance));
@@ -394,9 +400,7 @@ dtb_settings_speed_dialog_create(
                 XmNallowResize, True,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 167,
-                XmNwidth, 511,
+                XmNresizePolicy, XmRESIZE_ANY,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->speedDialog_panedwin, "white"),
                 NULL);
     }

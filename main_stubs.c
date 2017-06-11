@@ -34,6 +34,7 @@
  ***
  *** Add include files, types, macros, externs, and user functions here.
  ***/
+#include "configuration.h"
 #include "connect_ui.h"
 #include "settings_ui.h"
 #include "charset_ui.h"
@@ -180,6 +181,7 @@ doQuit(
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	exit(0);
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -254,6 +256,48 @@ showCode(
 	XtVaSetValues(dtbTarget->codeDialog_shellform, XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL, NULL);
 	XtManageChild(dtbTarget->codeDialog_shellform);
 
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+sendToSounder(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	vConfiguration.sounderSelected = !vConfiguration.sounderSelected;
+	if (vConfiguration.sounderSelected) {
+		dtb_set_label_from_image_file(dtb_main_mainwindow.sounderButton, "sounder_r.m");
+	} else {
+		dtb_set_label_from_image_file(dtb_main_mainwindow.sounderButton, "sounder.m");
+	}
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+sendToRadio(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	vConfiguration.radioSelected = !vConfiguration.radioSelected;
+	if (vConfiguration.radioSelected) {
+		dtb_set_label_from_image_file(dtb_main_mainwindow.sendButton, "send_r.m");
+	} else {
+		dtb_set_label_from_image_file(dtb_main_mainwindow.sendButton, "send.m");
+	}
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 

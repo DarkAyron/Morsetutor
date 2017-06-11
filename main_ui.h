@@ -73,6 +73,8 @@ typedef struct
     Widget	startButton;
     Widget	pauseButton;
     Widget	stopButton;
+    Widget	sounderButton;
+    Widget	sendButton;
     Widget	rxBox;
     
     Widget	outputBox_scrolledwin;	/* object "outputBox" */
@@ -155,6 +157,16 @@ void showCharset(
     XtPointer	callData
 );
 void showCode(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void sendToSounder(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void sendToRadio(
     Widget	widget,
     XtPointer	clientData,
     XtPointer	callData

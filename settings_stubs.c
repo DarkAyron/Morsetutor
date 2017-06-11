@@ -173,6 +173,36 @@ setCode(
 }
 
 
+void 
+initSpeedDialog(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+initCodeDialog(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
 
 /**************************************************************************
  *** DTB_USER_CODE_START

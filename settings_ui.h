@@ -111,6 +111,16 @@ void setCode(
     XtPointer	clientData,
     XtPointer	callData
 );
+void initSpeedDialog(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void initCodeDialog(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
 
 /*
  * Connections

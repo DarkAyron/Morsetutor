@@ -27,6 +27,7 @@ DtbCharsetCharsetDialogInfoRec	dtb_charset_charset_dialog =
 {
     False	 /* initialized */
 };
+DtbMessageDataRec	dtb_charset_dont_deselect;
 
 /*
  * Widget create procedure decls
@@ -208,9 +209,177 @@ dtb_charset_charset_dialog_initialize(
     /*
      * Add User and Connection callbacks
      */
-    	XtAddCallback(instance->lessonBox_items.lesson1_item,
-		XmNactivateCallback, setLesson,
+    	XtAddCallback(instance->charsetDialog,
+		XmNpopupCallback, initCharsetDialog,
     		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.A_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.B_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.C_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.D_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.E_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.F_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.G_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.H_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.I_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.J_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.K_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.L_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.M_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.N_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.O_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.P_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.Q_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.R_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.S_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.T_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.U_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.V_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.W_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.X_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.Y_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.Z_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.one_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.two_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.three_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.four_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.five_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.six_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.seven_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.eight_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.nine_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.zero_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.dot_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.comma_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.exclamation_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.question_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.equal_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.dash_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.underline_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.colon_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.semicolon_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.apostrophe_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.quotation_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.slash_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.open_bracket_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.close_bracket_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.dollar_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.ampersand_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.at_item,
+		XmNvalueChangedCallback, setToUserLesson,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.begin_item,
+		XmNvalueChangedCallback, dontDeselect,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->charBox_items.end_item,
+		XmNvalueChangedCallback, dontDeselect,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->lessonBox_items.lesson1_item,
+		XmNactivateCallback, setLesson,
+		(XtPointer)&(*instance));
 	XtAddCallback(instance->lessonBox_items.lesson2_item,
 		XmNactivateCallback, setLesson,
 		(XtPointer)&(*instance));
@@ -307,6 +476,34 @@ dtb_charset_charset_dialog_initialize(
 return 0;
 }
 
+int 
+dtb_charset_dont_deselect_initialize(DtbMessageData instance)
+{
+    if (instance->initialized)
+    {
+        return 0;
+    }
+    instance->initialized = True;
+
+    instance->type = XmDIALOG_INFORMATION;
+    instance->title = XmStringCreateLocalized("Charset");
+    instance->message = XmStringCreateLocalized("~ and + means start and stop.\nThese prosigns can't be deselected.");
+    instance->action1_label = XmStringCreateLocalized("OK");
+    instance->action1_callback = (XtCallbackProc) NULL;
+    instance->action2_label = (XmString) NULL;
+    instance->action2_callback = (XtCallbackProc) NULL;
+    instance->action3_label = (XmString) NULL;
+    instance->action3_callback = (XtCallbackProc) NULL;
+    instance->cancel_button = False;
+    instance->cancel_callback = (XtCallbackProc) NULL;
+    instance->help_button = False;
+    instance->help_data.help_text = (char *) NULL;
+    instance->help_data.help_volume = "";
+    instance->help_data.help_locationID = "";
+    instance->default_button = DTB_ACTION1_BUTTON;
+    return 0;
+}
+
 
 
 static int 
@@ -383,9 +580,7 @@ dtb_charset_charset_dialog_create(
                 XmNallowResize, True,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 227,
-                XmNwidth, 542,
+                XmNresizePolicy, XmRESIZE_ANY,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->charsetDialog_panedwin, "white"),
                 NULL);
     }

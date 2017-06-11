@@ -41,6 +41,11 @@
  ***
  *** Add include files, types, macros, externs, and user functions here.
  ***/
+#include <pthread.h>
+
+#include "configuration.h"
+
+void doQuit(Widget widget, XtPointer clientData, XtPointer callData);
 
 /*** DTB_USER_CODE_END
  ***
@@ -99,6 +104,7 @@ main(
      ***
      *** Add local variables and code.
      ***/
+    Atom       WM_DELETE_WINDOW;
     
     XtToolkitThreadInitialize();
 
@@ -146,6 +152,7 @@ main(
      ***  Add extra initialization code after this comment.
      ***/
     
+    readConfig();
     /*** DTB_USER_CODE_END
      ***
      *** End of user code section
@@ -161,6 +168,7 @@ main(
     dtbSettingsSpeedDialogInfo_clear(&dtb_settings_speed_dialog);
     dtbSettingsCodeDialogInfo_clear(&dtb_settings_code_dialog);
     dtbCharsetCharsetDialogInfo_clear(&dtb_charset_charset_dialog);
+    dtb_charset_dont_deselect_initialize(&dtb_charset_dont_deselect);
     dtbConnectConnectInfo_clear(&dtb_connect_connect);
     dtb_connect_netunreach_initialize(&dtb_connect_netunreach);
     dtb_connect_noderesponse_initialize(&dtb_connect_noderesponse);
@@ -188,7 +196,22 @@ main(
      *** that must be completed before the toplevel widget is
      *** realized.
      ***/
-    
+    WM_DELETE_WINDOW = XInternAtom (XtDisplay (toplevel), "WM_DELETE_WINDOW", False);
+    XmAddWMProtocolCallback (toplevel, WM_DELETE_WINDOW, doQuit,
+                                (XtPointer) toplevel);
+
+    if (vConfiguration.sounderSelected) {
+	dtb_set_label_from_image_file(dtb_main_mainwindow.sounderButton, "sounder_r.m");
+    } else {
+	dtb_set_label_from_image_file(dtb_main_mainwindow.sounderButton, "sounder.m");
+    }
+
+    if (vConfiguration.radioSelected) {
+	dtb_set_label_from_image_file(dtb_main_mainwindow.sendButton, "send_r.m");
+    } else {
+	dtb_set_label_from_image_file(dtb_main_mainwindow.sendButton, "send.m");
+    }
+
     /*** DTB_USER_CODE_END
      ***
      *** End of user code section

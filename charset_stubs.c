@@ -34,6 +34,24 @@
  ***
  *** Add include files, types, macros, externs, and user functions here.
  ***/
+#include "configuration.h"
+
+static Widget charBox_choice_items[55];
+static Widget lessonBox_menu_items[26];
+static Widget stageBox_menu_items[3];
+static char *lessonChars[] =
+{
+	"elv", "0a", "sq", "t2", "oc", "=d", "5r", "/?", "i9", "gx", "f4",
+	"nj", "u7", "h,", "kb", "3p", "my", "zw", "61", "8.", "!@", ":;",
+	"()", "\"$", "'&"
+};
+
+static int curLesson;
+static int curStage;
+char curCharset[55];
+static int findIndexInList(Widget element, Widget *list, int size);
+static void setWidgetParameters();
+static void getSelectedCharset();
 
 /*** DTB_USER_CODE_END
  ***
@@ -63,7 +81,6 @@ charset_charset_ok_CB1(
     XtUnmanageChild(instance->charsetDialog_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: charset_charset_ok_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -88,7 +105,6 @@ charset_charset_cancel_CB1(
     XtUnmanageChild(instance->charsetDialog_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: charset_charset_cancel_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -101,9 +117,14 @@ setCharset(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	getSelectedCharset();
+	vConfiguration.lesson = curLesson;
+	vConfiguration.stage = curStage;
+	memcpy(vConfiguration.charset, curCharset, CHARSET_LENGTH);
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -119,6 +140,7 @@ resetCharset(
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	initCharsetDialog(widget, clientData, callData);
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -131,9 +153,46 @@ setLesson(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	int selectedLesson;
+	Widget selectedLessonWidget;
+	int n, m;
+
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	XtVaGetValues(dtb_charset_charset_dialog.lessonBox, XmNmenuHistory, &selectedLessonWidget, NULL);
+	selectedLesson = findIndexInList(selectedLessonWidget, lessonBox_menu_items, 26);
+	if (selectedLesson == 25) {
+		curLesson = selectedLesson;
+	} else if (selectedLesson >= 0) {
+		curLesson = selectedLesson;
+		memset(curCharset, 0, CHARSET_LENGTH);
+		curCharset[53] = 1; /* start */
+		curCharset[54] = 1; /* end */
+		switch(curStage) {
+			case 0:
+				for (n = 0; n < strlen(lessonChars[curLesson]); n++) {
+					curCharset[getCharIndex(lessonChars[curLesson][n])] = 1;
+				}
+				break;
+			case 1:
+				curCharset[getCharIndex(lessonChars[curLesson][0])] = 1;
+				for (m = 0; m < curLesson; m++) {
+					for (n = 0; n < strlen(lessonChars[m]); n++) {
+						curCharset[getCharIndex(lessonChars[m][n])] = 1;
+					}
+				}
+				break;
+			case 2:
+				for (m = 0; m < curLesson + 1; m++) {
+					for (n = 0; n < strlen(lessonChars[m]); n++) {
+						curCharset[getCharIndex(lessonChars[m][n])] = 1;
+					}
+				}
+			break;
+		}
+		setWidgetParameters();
+	}
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -146,9 +205,167 @@ setLessonStage(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	int selectedStage;
+	Widget selectedStageWidget;
+
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	XtVaGetValues(dtb_charset_charset_dialog.stageBox, XmNmenuHistory, &selectedStageWidget, NULL);
+	selectedStage = findIndexInList(selectedStageWidget, stageBox_menu_items, 3);
+	if (selectedStage >= 0) {
+		curStage = selectedStage;
+		setLesson(widget, clientData, callData);
+	}
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+initCharsetDialog(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	int n;
+	Arg args[3];
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	charBox_choice_items[0] = dtb_charset_charset_dialog.charBox_items.A_item;
+	charBox_choice_items[1] = dtb_charset_charset_dialog.charBox_items.B_item;
+	charBox_choice_items[2] = dtb_charset_charset_dialog.charBox_items.C_item;
+	charBox_choice_items[3] = dtb_charset_charset_dialog.charBox_items.D_item;
+	charBox_choice_items[4] = dtb_charset_charset_dialog.charBox_items.E_item;
+	charBox_choice_items[5] = dtb_charset_charset_dialog.charBox_items.F_item;
+	charBox_choice_items[6] = dtb_charset_charset_dialog.charBox_items.G_item;
+	charBox_choice_items[7] = dtb_charset_charset_dialog.charBox_items.H_item;
+	charBox_choice_items[8] = dtb_charset_charset_dialog.charBox_items.I_item;
+	charBox_choice_items[9] = dtb_charset_charset_dialog.charBox_items.J_item;
+	charBox_choice_items[10] = dtb_charset_charset_dialog.charBox_items.K_item;
+	charBox_choice_items[11] = dtb_charset_charset_dialog.charBox_items.L_item;
+	charBox_choice_items[12] = dtb_charset_charset_dialog.charBox_items.M_item;
+	charBox_choice_items[13] = dtb_charset_charset_dialog.charBox_items.N_item;
+	charBox_choice_items[14] = dtb_charset_charset_dialog.charBox_items.O_item;
+	charBox_choice_items[15] = dtb_charset_charset_dialog.charBox_items.P_item;
+	charBox_choice_items[16] = dtb_charset_charset_dialog.charBox_items.Q_item;
+	charBox_choice_items[17] = dtb_charset_charset_dialog.charBox_items.R_item;
+	charBox_choice_items[18] = dtb_charset_charset_dialog.charBox_items.S_item;
+	charBox_choice_items[19] = dtb_charset_charset_dialog.charBox_items.T_item;
+	charBox_choice_items[20] = dtb_charset_charset_dialog.charBox_items.U_item;
+	charBox_choice_items[21] = dtb_charset_charset_dialog.charBox_items.V_item;
+	charBox_choice_items[22] = dtb_charset_charset_dialog.charBox_items.W_item;
+	charBox_choice_items[23] = dtb_charset_charset_dialog.charBox_items.X_item;
+	charBox_choice_items[24] = dtb_charset_charset_dialog.charBox_items.Y_item;
+	charBox_choice_items[25] = dtb_charset_charset_dialog.charBox_items.Z_item;
+	charBox_choice_items[26] = dtb_charset_charset_dialog.charBox_items.one_item;
+	charBox_choice_items[27] = dtb_charset_charset_dialog.charBox_items.two_item;
+	charBox_choice_items[28] = dtb_charset_charset_dialog.charBox_items.three_item;
+	charBox_choice_items[29] = dtb_charset_charset_dialog.charBox_items.four_item;
+	charBox_choice_items[30] = dtb_charset_charset_dialog.charBox_items.five_item;
+	charBox_choice_items[31] = dtb_charset_charset_dialog.charBox_items.six_item;
+	charBox_choice_items[32] = dtb_charset_charset_dialog.charBox_items.seven_item;
+	charBox_choice_items[33] = dtb_charset_charset_dialog.charBox_items.eight_item;
+	charBox_choice_items[34] = dtb_charset_charset_dialog.charBox_items.nine_item;
+	charBox_choice_items[35] = dtb_charset_charset_dialog.charBox_items.zero_item;
+	charBox_choice_items[36] = dtb_charset_charset_dialog.charBox_items.dot_item;
+	charBox_choice_items[37] = dtb_charset_charset_dialog.charBox_items.comma_item;
+	charBox_choice_items[38] = dtb_charset_charset_dialog.charBox_items.exclamation_item;
+	charBox_choice_items[39] = dtb_charset_charset_dialog.charBox_items.question_item;
+	charBox_choice_items[40] = dtb_charset_charset_dialog.charBox_items.equal_item;
+	charBox_choice_items[41] = dtb_charset_charset_dialog.charBox_items.dash_item;
+	charBox_choice_items[42] = dtb_charset_charset_dialog.charBox_items.underline_item;
+	charBox_choice_items[43] = dtb_charset_charset_dialog.charBox_items.colon_item;
+	charBox_choice_items[44] = dtb_charset_charset_dialog.charBox_items.semicolon_item;
+	charBox_choice_items[45] = dtb_charset_charset_dialog.charBox_items.apostrophe_item;
+	charBox_choice_items[46] = dtb_charset_charset_dialog.charBox_items.quotation_item;
+	charBox_choice_items[47] = dtb_charset_charset_dialog.charBox_items.slash_item;
+	charBox_choice_items[48] = dtb_charset_charset_dialog.charBox_items.open_bracket_item;
+	charBox_choice_items[49] = dtb_charset_charset_dialog.charBox_items.close_bracket_item;
+	charBox_choice_items[50] = dtb_charset_charset_dialog.charBox_items.dollar_item;
+	charBox_choice_items[51] = dtb_charset_charset_dialog.charBox_items.ampersand_item;
+	charBox_choice_items[52] = dtb_charset_charset_dialog.charBox_items.at_item;
+	charBox_choice_items[53] = dtb_charset_charset_dialog.charBox_items.begin_item;
+	charBox_choice_items[54] = dtb_charset_charset_dialog.charBox_items.end_item;
+
+	lessonBox_menu_items[0] = dtb_charset_charset_dialog.lessonBox_items.lesson1_item;
+	lessonBox_menu_items[1] = dtb_charset_charset_dialog.lessonBox_items.lesson2_item;
+	lessonBox_menu_items[2] = dtb_charset_charset_dialog.lessonBox_items.lesson3_item;
+	lessonBox_menu_items[3] = dtb_charset_charset_dialog.lessonBox_items.lesson4_item;
+	lessonBox_menu_items[4] = dtb_charset_charset_dialog.lessonBox_items.lesson5_item;
+	lessonBox_menu_items[5] = dtb_charset_charset_dialog.lessonBox_items.lesson6_item;
+	lessonBox_menu_items[6] = dtb_charset_charset_dialog.lessonBox_items.lesson7_item;
+	lessonBox_menu_items[7] = dtb_charset_charset_dialog.lessonBox_items.lesson8_item;
+	lessonBox_menu_items[8] = dtb_charset_charset_dialog.lessonBox_items.lesson9_item;
+	lessonBox_menu_items[9] = dtb_charset_charset_dialog.lessonBox_items.lesson10_item;
+	lessonBox_menu_items[10] = dtb_charset_charset_dialog.lessonBox_items.lesson11_item;
+	lessonBox_menu_items[11] = dtb_charset_charset_dialog.lessonBox_items.lesson12_item;
+	lessonBox_menu_items[12] = dtb_charset_charset_dialog.lessonBox_items.lesson13_item;
+	lessonBox_menu_items[13] = dtb_charset_charset_dialog.lessonBox_items.lesson14_item;
+	lessonBox_menu_items[14] = dtb_charset_charset_dialog.lessonBox_items.lesson15_item;
+	lessonBox_menu_items[15] = dtb_charset_charset_dialog.lessonBox_items.lesson16_item;
+	lessonBox_menu_items[16] = dtb_charset_charset_dialog.lessonBox_items.lesson17_item;
+	lessonBox_menu_items[17] = dtb_charset_charset_dialog.lessonBox_items.lesson18_item;
+	lessonBox_menu_items[18] = dtb_charset_charset_dialog.lessonBox_items.lesson19_item;
+	lessonBox_menu_items[19] = dtb_charset_charset_dialog.lessonBox_items.lesson20_item;
+	lessonBox_menu_items[20] = dtb_charset_charset_dialog.lessonBox_items.lesson21_item;
+	lessonBox_menu_items[21] = dtb_charset_charset_dialog.lessonBox_items.lesson22_item;
+	lessonBox_menu_items[22] = dtb_charset_charset_dialog.lessonBox_items.lesson23_item;
+	lessonBox_menu_items[23] = dtb_charset_charset_dialog.lessonBox_items.lesson24_item;
+	lessonBox_menu_items[24] = dtb_charset_charset_dialog.lessonBox_items.lesson25_item;
+	lessonBox_menu_items[25] = dtb_charset_charset_dialog.lessonBox_items.user_item;
+
+	stageBox_menu_items[0] = dtb_charset_charset_dialog.stageBox_items.only_new;
+	stageBox_menu_items[1] = dtb_charset_charset_dialog.stageBox_items.one;
+	stageBox_menu_items[2] = dtb_charset_charset_dialog.stageBox_items.all;
+
+	memcpy(curCharset, vConfiguration.charset, CHARSET_LENGTH);
+	curLesson = vConfiguration.lesson;
+	curStage = vConfiguration.stage;
+
+	setWidgetParameters();
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+dontDeselect(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	if (!dtb_charset_dont_deselect.initialized) {
+		dtb_charset_dont_deselect_initialize(&dtb_charset_dont_deselect);
+	}
+
+	dtb_show_message(dtb_charset_charset_dialog.charsetDialog, &dtb_charset_dont_deselect, NULL, NULL);
+
+	XtVaSetValues(widget, XmNset, 1, NULL);
+
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+setToUserLesson(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	XtVaSetValues(dtb_charset_charset_dialog.lessonBox, XmNmenuHistory, lessonBox_menu_items[25], NULL);
+	curLesson = 25;
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -162,6 +379,48 @@ setLessonStage(
  *** Add new functions here, or at the top of the file.
  ***/
 
+static void getSelectedCharset()
+{
+	Arg args[2];
+	int n;
+	int value;
+
+	XtSetArg(args[0], XmNset, &value);
+
+	for (n = 0; n < CHARSET_LENGTH; n++) {
+		XtGetValues(charBox_choice_items[n], args, 1);
+		curCharset[n] = value;
+	}
+
+}
+
+static int findIndexInList(Widget element, Widget *list, int size)
+{
+	int n;
+
+	for (n = 0; n < size; n++) {
+		if (element == list[n]) {
+			return n;
+		}
+	}
+
+	return -1;
+}
+
+static void setWidgetParameters()
+{
+	int n;
+	Arg args[3];
+
+	for (n = 0; n < CHARSET_LENGTH; n++) {
+		XtSetArg(args[0], XmNset, curCharset[n]);
+		XtSetValues(charBox_choice_items[n], args, 1);
+	}
+
+	XtVaSetValues(dtb_charset_charset_dialog.lessonBox, XmNmenuHistory, lessonBox_menu_items[curLesson], NULL);
+	XtVaSetValues(dtb_charset_charset_dialog.stageBox, XmNmenuHistory, stageBox_menu_items[curStage], NULL);
+
+}
 /*** DTB_USER_CODE_END
  ***
  *** End of user code section

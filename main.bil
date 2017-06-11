@@ -95,6 +95,8 @@
 		startButton
 		pauseButton
 		stopButton
+		sounderButton
+		sendButton
 	)
 )
 :element connectButton
@@ -153,6 +155,34 @@
 	:north-attachment	(:point 0 4)
 	:west-attachment	(:obj pauseButton 5)
 )
+:element sounderButton
+(
+	:type			:button
+	:button-type		:push-button
+	:x			203
+	:y			7
+	:label-type		:graphic
+	:label-alignment	:center
+	:label			"sounder.m"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 4)
+	:west-attachment	(:obj stopButton 12)
+)
+:element sendButton
+(
+	:type			:button
+	:button-type		:push-button
+	:x			250
+	:y			12
+	:label-type		:graphic
+	:label-alignment	:center
+	:label			"send.m"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 4)
+	:west-attachment	(:obj sounderButton 5)
+)
 :element rxBox
 (
 	:type			:text-pane
@@ -193,6 +223,76 @@
 	:south-attachment	(:obj rxBox 2)
 	:east-attachment	(:point 0 0)
 	:west-attachment	(:point 0 0)
+)
+:element about
+(
+	:type			:dialog
+	:bg-color		"white"
+	:label			"About"
+	:resizable		:false
+	:visible		:false
+	:default-button		about_ok
+	:children		(
+		controlpane
+		dialog_button_panel
+	)
+)
+:element controlpane
+(
+	:type			:container
+	:container-type		:relative
+	:x			120
+	:y			31
+	:width			454
+	:height			304
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		label
+	)
+)
+:element label
+(
+	:type			:label
+	:x			19
+	:y			16
+	:label-type		:graphic
+	:label			"about"
+	:label-alignment	:center
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element dialog_button_panel
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		about_ok
+	)
+)
+:element about_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 60 0)
+	:west-attachment	(:grid-line 40 0)
 )
 :element File_menu
 (
@@ -301,78 +401,6 @@
 	:mnemonic		"A"
 	:active			:true
 )
-:element about
-(
-	:type			:dialog
-	:width			454
-	:height			304
-	:bg-color		"white"
-	:label			"About"
-	:resizable		:false
-	:visible		:false
-	:default-button		about_ok
-	:children		(
-		controlpane
-		dialog_button_panel
-	)
-)
-:element controlpane
-(
-	:type			:container
-	:container-type		:relative
-	:x			120
-	:y			31
-	:width			454
-	:height			304
-	:visible		:true
-	:active			:true
-	:border-frame		:none
-	:north-attachment	(:point 0 0)
-	:south-attachment	(:point 0 0)
-	:east-attachment	(:point 0 0)
-	:west-attachment	(:point 0 0)
-	:children		(
-		label
-	)
-)
-:element label
-(
-	:type			:label
-	:x			19
-	:y			16
-	:label-type		:graphic
-	:label			"about"
-	:label-alignment	:center
-	:active			:true
-	:visible		:true
-	:north-attachment	(:point 0 0)
-	:west-attachment	(:point 0 0)
-)
-:element dialog_button_panel
-(
-	:type			:container
-	:container-type		:button-panel
-	:height			48
-	:visible		:true
-	:active			:true
-	:border-frame		:none
-	:children		(
-		about_ok
-	)
-)
-:element about_ok
-(
-	:type			:button
-	:button-type		:push-button
-	:label-type		:string
-	:label-alignment	:center
-	:label			"OK"
-	:active			:true
-	:visible		:true
-	:north-attachment	(:point 0 5)
-	:east-attachment	(:grid-line 60 0)
-	:west-attachment	(:grid-line 40 0)
-)
 :connection
 (
 	:from			connectButton
@@ -460,5 +488,26 @@
 	:action-type		:builtin
 	:action			:show
 	:arg-type		:void
+)
+:connection
+(
+	:from			sounderButton
+	:when			:activate
+	:action-type		:call-function
+	:action			sendToSounder
+)
+:connection
+(
+	:from			sendButton
+	:when			:activate
+	:action-type		:call-function
+	:action			sendToRadio
+)
+:connection
+(
+	:from			mainwindow
+	:when			:destroy
+	:action-type		:call-function
+	:action			doQuit
 )
 )

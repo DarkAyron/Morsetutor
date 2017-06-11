@@ -239,7 +239,9 @@ typedef struct
 } DtbCharsetCharsetDialogInfoRec, *DtbCharsetCharsetDialogInfo;
 
 
+
 extern DtbCharsetCharsetDialogInfoRec dtb_charset_charset_dialog;
+extern DtbMessageDataRec dtb_charset_dont_deselect;
 
 /*
  * Structure Clear Procedures: These set the fields to NULL
@@ -253,6 +255,7 @@ int dtb_charset_charset_dialog_initialize(
     DtbCharsetCharsetDialogInfo	instance,
     Widget	parent
 );
+int dtb_charset_dont_deselect_initialize(DtbMessageData instance);
 
 /*
  * User Callbacks
@@ -273,6 +276,21 @@ void setLesson(
     XtPointer	callData
 );
 void setLessonStage(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void initCharsetDialog(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void dontDeselect(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void setToUserLesson(
     Widget	widget,
     XtPointer	clientData,
     XtPointer	callData

@@ -79,7 +79,8 @@ OBJS = \
 	charset_stubs.o \
 	connect_ui.o \
 	connect_stubs.o \
-	network.o
+	network.o \
+	configuration.o
 
 .NO_PARALLEL: $(TARGETS.h) $(TARGETS.h.merged) $(TARGETS.c) $(TARGETS.c.merged)
 
@@ -112,3 +113,6 @@ CLEAN_FILES =	core .dtcodegen.log *.BAK *.delta \
 		$(PROGRAM) $(OBJS)
 clean:
 	$(RM)  $(CLEAN_FILES)
+
+dtbclean:
+	$(RM)  $(CLEAN_FILES) $(TARGETS.c) $(TARGETS.h)

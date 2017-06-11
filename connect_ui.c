@@ -324,9 +324,7 @@ dtb_connect_connect_create(
                 XmNallowResize, True,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 95,
-                XmNwidth, 381,
+                XmNresizePolicy, XmRESIZE_ANY,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->connect_panedwin, "white"),
                 NULL);
     }

@@ -91,6 +91,14 @@ static int dtb_main_stop_button_create(
     DtbMainMainwindowInfo	instance,
     Widget	parent
 );
+static int dtb_main_sounder_button_create(
+    DtbMainMainwindowInfo	instance,
+    Widget	parent
+);
+static int dtb_main_send_button_create(
+    DtbMainMainwindowInfo	instance,
+    Widget	parent
+);
 static int dtb_main_rx_box_create(
     DtbMainMainwindowInfo	instance,
     Widget	parent
@@ -159,6 +167,10 @@ dtb_main_mainwindow_initialize(
         instance->mainwindow_toolbar);
     dtb_main_stop_button_create(instance,
         instance->mainwindow_toolbar);
+    dtb_main_sounder_button_create(instance,
+        instance->mainwindow_toolbar);
+    dtb_main_send_button_create(instance,
+        instance->mainwindow_toolbar);
     dtb_main_rx_box_create(instance,
         instance->mainwindow_form);
     dtb_main_output_box_create(instance,
@@ -200,6 +212,14 @@ dtb_main_mainwindow_initialize(
     
     XtVaSetValues(instance->stopButton,
         XmNleftWidget, instance->pauseButton,
+        NULL);
+    
+    XtVaSetValues(instance->sounderButton,
+        XmNleftWidget, instance->stopButton,
+        NULL);
+    
+    XtVaSetValues(instance->sendButton,
+        XmNleftWidget, instance->sounderButton,
         NULL);
     
     XtVaSetValues(instance->outputBox_scrolledwin,
@@ -252,9 +272,12 @@ dtb_main_mainwindow_initialize(
     /*
      * Add User and Connection callbacks
      */
-    	XtAddCallback(instance->menubar_File_item_File_menu_items.items_item,
-		XmNactivateCallback, doConnect,
+    	XtAddCallback(instance->mainwindow,
+		XmNdestroyCallback, doQuit,
     		(XtPointer)&(*instance));
+	XtAddCallback(instance->menubar_File_item_File_menu_items.items_item,
+		XmNactivateCallback, doConnect,
+		(XtPointer)&(*instance));
 	XtAddCallback(instance->menubar_File_item_File_menu_items.Quit_item,
 		XmNactivateCallback, doQuit,
 		(XtPointer)&(*instance));
@@ -284,6 +307,12 @@ dtb_main_mainwindow_initialize(
 		(XtPointer)&(*instance));
 	XtAddCallback(instance->stopButton,
 		XmNactivateCallback, stopTraining,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->sounderButton,
+		XmNactivateCallback, sendToSounder,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->sendButton,
+		XmNactivateCallback, sendToRadio,
 		(XtPointer)&(*instance));
 return 0;
 }
@@ -511,9 +540,7 @@ dtb_main_about_create(
                 XmNallowResize, True,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNresizePolicy, XmRESIZE_GROW,
-                XmNheight, 304,
-                XmNwidth, 454,
+                XmNresizePolicy, XmRESIZE_ANY,
                 XmNbackground, dtb_cvt_string_to_pixel(instance->about_panedwin, "white"),
                 NULL);
     }
@@ -983,6 +1010,86 @@ dtb_main_stop_button_create(
         dtb_set_label_from_image_file(instance->stopButton, "key_stop.m");
     }
     if (instance->stopButton == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_main_sounder_button_create(
+    DtbMainMainwindowInfo instance,
+    Widget parent
+)
+{
+    int	return_code = 0;
+    Display *	display = NULL;
+    Pixmap	label_pixmap = NULL;
+    Drawable	drawable = NULL;
+    
+    display = XtDisplay(parent);
+    drawable = DefaultRootWindow(display);
+    
+    if (instance->sounderButton == NULL) {
+        instance->sounderButton =
+            XtVaCreateWidget("sounderButton",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightAttachment, XmATTACH_NONE,
+                XmNleftOffset, 12,
+                XmNleftAttachment, XmATTACH_WIDGET,
+                XmNtopOffset, 4,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNy, 7,
+                XmNx, 203,
+                NULL);
+        dtb_set_label_from_image_file(instance->sounderButton, "sounder.m");
+    }
+    if (instance->sounderButton == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_main_send_button_create(
+    DtbMainMainwindowInfo instance,
+    Widget parent
+)
+{
+    int	return_code = 0;
+    Display *	display = NULL;
+    Pixmap	label_pixmap = NULL;
+    Drawable	drawable = NULL;
+    
+    display = XtDisplay(parent);
+    drawable = DefaultRootWindow(display);
+    
+    if (instance->sendButton == NULL) {
+        instance->sendButton =
+            XtVaCreateWidget("sendButton",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightAttachment, XmATTACH_NONE,
+                XmNleftOffset, 5,
+                XmNleftAttachment, XmATTACH_WIDGET,
+                XmNtopOffset, 4,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNy, 12,
+                XmNx, 250,
+                NULL);
+        dtb_set_label_from_image_file(instance->sendButton, "send.m");
+    }
+    if (instance->sendButton == NULL)
         return -1;
 
     return 0;

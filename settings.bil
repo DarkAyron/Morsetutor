@@ -5,8 +5,6 @@
 :element speedDialog
 (
 	:type			:dialog
-	:width			511
-	:height			167
 	:bg-color		"white"
 	:label			"Speed"
 	:resizable		:false
@@ -315,5 +313,19 @@
 	:action-type		:builtin
 	:action			:hide
 	:arg-type		:void
+)
+:connection
+(
+	:from			speedDialog
+	:when			:show
+	:action-type		:call-function
+	:action			initSpeedDialog
+)
+:connection
+(
+	:from			codeDialog
+	:when			:show
+	:action-type		:call-function
+	:action			initCodeDialog
 )
 )
