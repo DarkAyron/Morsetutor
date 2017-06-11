@@ -93,6 +93,8 @@ void loadDefaultConfig()
 	vConfiguration.charset[53] = 1;
 	vConfiguration.charset[54] = 1;
 	vConfiguration.sounderSelected = 1;
+	vConfiguration.speed = 25;
+	vConfiguration.farnsworth = 0;
 }
 
 int readConfig()

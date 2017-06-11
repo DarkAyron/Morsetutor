@@ -70,7 +70,6 @@ connect_connect_cancel_CB1(
     XtUnmanageChild(instance->connect_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: connect_connect_cancel_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 

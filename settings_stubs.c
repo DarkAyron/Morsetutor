@@ -34,6 +34,7 @@
  ***
  *** Add include files, types, macros, externs, and user functions here.
  ***/
+#include "configuration.h"
 
 /*** DTB_USER_CODE_END
  ***
@@ -63,7 +64,6 @@ settings_speed_cancel_CB1(
     XtUnmanageChild(instance->speedDialog_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: settings_speed_cancel_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -88,7 +88,6 @@ settings_speed_ok_CB1(
     XtUnmanageChild(instance->speedDialog_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: settings_speed_ok_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -113,7 +112,6 @@ settings_code_ok_CB1(
     XtUnmanageChild(instance->codeDialog_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: settings_code_ok_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -138,7 +136,6 @@ settings_code_cancel_CB1(
     XtUnmanageChild(instance->codeDialog_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
-    printf("action: settings_code_cancel_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -151,9 +148,17 @@ setSpeed(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	Arg args[3];
+	int value;
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	XtSetArg(args[0], XmNvalue, &value);
+
+	XtGetValues(dtb_settings_speed_dialog.Speed, args, 1);
+	vConfiguration.speed = value;
+	XtGetValues(dtb_settings_speed_dialog.farnsworth, args, 1);
+	vConfiguration.farnsworth = value;
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -166,9 +171,22 @@ setCode(
 )
 {
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+	Arg args[3];
+	int value;
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	XtSetArg(args[0], XmNset, &value);
+
+	XtGetValues(dtb_settings_code_dialog.codeBox_items.American_item, args, 1);
+	if (value & 0x01) {
+		vConfiguration.code = CODE_AMERICAN;
+	}
+
+	XtGetValues(dtb_settings_code_dialog.codeBox_items.Continental_item, args, 1);
+	if (value & 0x01) {
+		vConfiguration.code = CODE_CONTINENTAL;
+	}
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -184,6 +202,8 @@ initSpeedDialog(
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	XtVaSetValues(dtb_settings_speed_dialog.Speed, XmNvalue, vConfiguration.speed, NULL);
+	XtVaSetValues(dtb_settings_speed_dialog.farnsworth, XmNvalue, vConfiguration.farnsworth, NULL);
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -199,6 +219,16 @@ initCodeDialog(
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	switch (vConfiguration.code) {
+		case CODE_AMERICAN:
+			XtVaSetValues(dtb_settings_code_dialog.codeBox_items.American_item, XmNset, 1, NULL);
+			XtVaSetValues(dtb_settings_code_dialog.codeBox_items.Continental_item, XmNset, 0, NULL);
+			break;
+		case CODE_CONTINENTAL:
+			XtVaSetValues(dtb_settings_code_dialog.codeBox_items.American_item, XmNset, 0, NULL);
+			XtVaSetValues(dtb_settings_code_dialog.codeBox_items.Continental_item, XmNset, 1, NULL);
+			break;
+	}
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 

@@ -47,12 +47,12 @@ typedef struct
 } DtbSettingsSpeedDialogInfoRec, *DtbSettingsSpeedDialogInfo;
 
 typedef struct {
-    Widget	International_item;
-    Widget	items_item;
+    Widget	Continental_item;
+    Widget	American_item;
 } SettingsCodeBoxItemsRec, *SettingsCodeBoxItems;
 typedef struct {
-    Widget	International_item;
-    Widget	items_item;
+    Widget	Continental_item;
+    Widget	American_item;
 } SettingsCodeBoxChoiceItemsRec, *SettingsCodeBoxChoiceItems;
 typedef struct
 {

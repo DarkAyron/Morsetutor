@@ -902,11 +902,11 @@ dtb_settings_code_box_create(
     Widget	codeBox_choice_items[2];
     static String	codeBox_choice_names[] =
     {
-        "International_item", "items_item"
+        "Continental_item", "American_item"
     };
     static String	codeBox_choice_strings[] =
     {
-        "International", "Railroad Morse"
+        "Continental", "American"
     };
     int	i = 0;
     Boolean	codeBox_choice_selected[] =
@@ -987,8 +987,8 @@ dtb_settings_code_box_create(
         XmStringFree(label_xmstring);
         label_xmstring = NULL;
     }
-    instance->codeBox_items.International_item = codeBox_choice_items[0];
-    instance->codeBox_items.items_item = codeBox_choice_items[1];
+    instance->codeBox_items.Continental_item = codeBox_choice_items[0];
+    instance->codeBox_items.American_item = codeBox_choice_items[1];
     	dtb_center(instance->codeBox_rowcolumn, DTB_CENTER_POSITION_BOTH);
     return 0;
 }

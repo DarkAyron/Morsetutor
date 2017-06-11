@@ -181,6 +181,7 @@ doQuit(
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+	writeConfig();
 	exit(0);
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }

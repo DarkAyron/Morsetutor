@@ -190,25 +190,25 @@
 	:north-attachment	(:center-grid-line 50 0)
 	:west-attachment	(:center-grid-line 50 0)
 	:children		(
-		codeBox_International_item
-		codeBox_items_item
+		codeBox_Continental_item
+		codeBox_American_item
 	)
 )
-:element codeBox_International_item
+:element codeBox_Continental_item
 (
 	:type			:item
 	:item-type		:item-for-choice
 	:label-type		:string
-	:label			"International"
+	:label			"Continental"
 	:active			:true
 	:selected		:true
 )
-:element codeBox_items_item
+:element codeBox_American_item
 (
 	:type			:item
 	:item-type		:item-for-choice
 	:label-type		:string
-	:label			"Railroad Morse"
+	:label			"American"
 	:active			:true
 	:selected		:false
 )
