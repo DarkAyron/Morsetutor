@@ -60,6 +60,30 @@ connect_connect_cancel_CB1(
     /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
     /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
     
+    DtbConnectConnectManualInfo	dtbTarget = (DtbConnectConnectManualInfo)clientData;
+    DtbConnectConnectManualInfo	instance = dtbTarget;	/* obsolete */
+    
+    if (!(dtbTarget->initialized))
+    {
+        dtb_connect_connect_manual_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+    }
+    XtUnmanageChild(instance->connect_manual_shellform);
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+connect_con_ok_CB1(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
     DtbConnectConnectInfo	dtbTarget = (DtbConnectConnectInfo)clientData;
     DtbConnectConnectInfo	instance = dtbTarget;	/* obsolete */
     
@@ -70,6 +94,57 @@ connect_connect_cancel_CB1(
     XtUnmanageChild(instance->connect_shellform);
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    printf("action: connect_con_ok_CB1()\n");
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+connect_con_cancel_CB1(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    DtbConnectConnectInfo	dtbTarget = (DtbConnectConnectInfo)clientData;
+    DtbConnectConnectInfo	instance = dtbTarget;	/* obsolete */
+    
+    if (!(dtbTarget->initialized))
+    {
+        dtb_connect_connect_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+    }
+    XtUnmanageChild(instance->connect_shellform);
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    printf("action: connect_con_cancel_CB1()\n");
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+connect_con_manual_CB1(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    DtbConnectConnectManualInfo	dtbTarget = (DtbConnectConnectManualInfo)clientData;
+    DtbConnectConnectManualInfo	instance = dtbTarget;	/* obsolete */
+    
+    if (!(dtbTarget->initialized))
+    {
+        dtb_connect_connect_manual_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+    }
+    XtManageChild(instance->connect_manual_shellform);
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    printf("action: connect_con_manual_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -101,6 +176,40 @@ doRescan(
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
 	connect_ScanNetworks();
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+doSAP(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    XmString *nodes;
+    Cardinal n_nodes;
+    struct sap_entry *sapResult;
+    int n;
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    XtVaGetValues(dtb_connect_connect.list, XmNuserData, &sapResult, NULL);
+    if (sapResult)
+	    XtFree((char*)sapResult);
+
+    sapResult = requestSAP(&n_nodes);
+    nodes = XtCalloc(n_nodes, sizeof(XmString));
+
+    for (n = 0; n < n_nodes; n++) {
+	    nodes[n] = XmStringCreateLocalized(sapResult[n].ser_name);
+    }
+
+    XtVaSetValues(dtb_connect_connect.list, XmNuserData, sapResult, XmNitems, nodes, XmNitemCount, n_nodes, NULL);
+    for (n = 0; n < n_nodes; XmStringFree(nodes[n++]));
+    XtFree(nodes);
+
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -139,19 +248,19 @@ int connect_ScanNetworks()
 		netnumString = XmStringCreateLocalized(str);
 		networkBoxItems[n] = XtVaCreateWidget(str,
 			xmPushButtonWidgetClass,
-			dtb_connect_connect.networkBox_menu,
+			dtb_connect_connect_manual.networkBox_menu,
 			XmNlabelString, netnumString,
 			NULL);
 		XmStringFree(netnumString);
 	}
 	nNetworkBoxItems = nNetworks;
-	XtVaGetValues(dtb_connect_connect.networkBox_menu,
+	XtVaGetValues(dtb_connect_connect_manual.networkBox_menu,
 			XmNchildren, &children, XmNnumChildren, &n, NULL);
 	XtManageChildren(children, n);
 
 	n = 0;
 	if (defaultNet >= 0) {
-		XtVaSetValues(dtb_connect_connect.networkBox, XmNmenuHistory, networkBoxItems[defaultNet], NULL);
+		XtVaSetValues(dtb_connect_connect_manual.networkBox, XmNmenuHistory, networkBoxItems[defaultNet], NULL);
 	}
 	return nNetworks;
 }

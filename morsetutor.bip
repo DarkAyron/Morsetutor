@@ -1,7 +1,7 @@
 :bil-version	1 0
 :project morsetutor
 (
-	:files			(main.bil settings.bil charset.bil connect.bil)
+	:files			(main.bil settings.bil charset.bil connect.bil deviceConfig.bil)
 	:vendor			"Draconitron"
 	:version		"1.0"
 	:root-window		main.mainwindow

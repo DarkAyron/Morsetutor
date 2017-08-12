@@ -25,6 +25,7 @@
 #include <Xm/ScrolledW.h>
 #include <Xm/List.h>
 #include <Xm/Label.h>
+#include <Xm/FileSB.h>
 #include "dtb_utils.h"
 #include "morsetutor.h"
 #include "main_ui.h"
@@ -40,6 +41,11 @@ DtbMainAboutInfoRec	dtb_main_about =
     False	 /* initialized */
 };
 
+DtbMainFileSelnInfoRec	dtb_main_file_seln = 
+{
+    False	 /* initialized */
+};
+
 /*
  * Widget create procedure decls
  */
@@ -49,6 +55,10 @@ static int dtb_main_mainwindow_create(
 );
 static int dtb_main_about_create(
     DtbMainAboutInfo	instance,
+    Widget	parent
+);
+static int dtb_main_file_seln_create(
+    DtbMainFileSelnInfo	instance,
     Widget	parent
 );
 static int dtb_main_menubar_create(
@@ -278,17 +288,23 @@ dtb_main_mainwindow_initialize(
 	XtAddCallback(instance->menubar_File_item_File_menu_items.items_item,
 		XmNactivateCallback, doConnect,
 		(XtPointer)&(*instance));
+	XtAddCallback(instance->menubar_File_item_File_menu_items.items_item2,
+		XmNactivateCallback, main_File_menu_items_item2_CB1,
+		(XtPointer)&dtb_main_file_seln);
 	XtAddCallback(instance->menubar_File_item_File_menu_items.Quit_item,
 		XmNactivateCallback, doQuit,
 		(XtPointer)&(*instance));
 	XtAddCallback(instance->menubar_Edit_item_Edit_menu_items.items_item,
 		XmNactivateCallback, showSpeed,
 		(XtPointer)&(*instance));
-	XtAddCallback(instance->menubar_Edit_item_Edit_menu_items.items_item2,
+	XtAddCallback(instance->menubar_Edit_item_Edit_menu_items.items_item4,
 		XmNactivateCallback, showCharset,
 		(XtPointer)&(*instance));
-	XtAddCallback(instance->menubar_Edit_item_Edit_menu_items.items_item3,
+	XtAddCallback(instance->menubar_Edit_item_Edit_menu_items.items_item2,
 		XmNactivateCallback, showCode,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->menubar_Edit_item_Edit_menu_items.items_item3,
+		XmNactivateCallback, editDeviceConfig,
 		(XtPointer)&(*instance));
 	XtAddCallback(instance->menubar_Training_item_Training_menu_items.Start_item,
 		XmNactivateCallback, startTraining,
@@ -405,6 +421,55 @@ dtb_main_about_initialize(
     	XtAddCallback(instance->about_ok,
 		XmNactivateCallback, main_about_ok_CB1,
     		(XtPointer)&(*instance));
+return 0;
+}
+
+int 
+dtbMainFileSelnInfo_clear(DtbMainFileSelnInfo instance)
+{
+    memset((void *)(instance), 0, sizeof(*instance));
+    return 0;
+}
+
+int 
+dtb_main_file_seln_initialize(
+    DtbMainFileSelnInfo instance,
+    Widget parent
+)
+{
+    WidgetList	children = NULL;
+    int		numChildren = 0;
+    if (instance->initialized)
+    {
+        return 0;
+    }
+    instance->initialized = True;
+
+    dtb_main_file_seln_create(instance,
+        parent);
+    
+    /*
+     * Add widget-reference resources.
+     */
+    
+    /*
+     * Call utility functions to do group layout
+     */
+    
+    
+    /*
+     * Manage the tree, from the bottom up.
+     */
+    
+    /*
+     * Add User and Connection callbacks
+     */
+    	XtAddCallback(instance->file_seln,
+		XmNokCallback, main_file_seln_CB1,
+    		(XtPointer)&(*instance));
+	XtAddCallback(instance->file_seln,
+		XmNcancelCallback, main_file_seln_CB2,
+		(XtPointer)&(*instance));
 return 0;
 }
 
@@ -553,6 +618,37 @@ dtb_main_about_create(
 
 
 static int 
+dtb_main_file_seln_create(
+    DtbMainFileSelnInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    int	n = 0;
+    Arg	args[8];	/* need 3 args (add 5 to be safe) */
+    XmString	oklabel_xmstring = NULL;
+    
+    if (instance->file_seln == NULL) {
+        oklabel_xmstring = XmStringCreateLocalized("Ok");
+        n = 0;
+        XtSetArg(args[n], XmNfileTypeMask, XmFILE_REGULAR);  ++n;
+        XtSetArg(args[n], XmNautoUnmanage, True);  ++n;
+        XtSetArg(args[n], XmNokLabelString, oklabel_xmstring);  ++n;
+        instance->file_seln =
+            XmCreateFileSelectionDialog(parent,
+                "dtb_main_file_seln", args, n);
+        XmStringFree(oklabel_xmstring);
+        oklabel_xmstring = NULL;
+    }
+    instance->file_seln_shell = XtParent(instance->file_seln);
+    XtVaSetValues(instance->file_seln_shell,
+        XmNtitle, "Open training file",NULL);
+    return 0;
+}
+
+
+
+static int 
 dtb_main_menubar_create(
     DtbMainMainwindowInfo instance,
     Widget parent
@@ -679,6 +775,32 @@ dtb_main_menubar_file_item_file_menu_create(
     if (instance->menubar_File_item_File_menu_items.separator1_item == NULL)
         return -1;
 
+    label_xmstring = XmStringCreateLocalized("Open...");
+    if (instance->menubar_File_item_File_menu_items.items_item2 == NULL) {
+        instance->menubar_File_item_File_menu_items.items_item2 =
+            XtVaCreateManagedWidget("items_item2",
+                xmPushButtonWidgetClass,
+                instance->menubar_File_item_File_menu,
+                XmNmnemonic, XStringToKeysym("O"),
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->menubar_File_item_File_menu_items.items_item2 == NULL)
+        return -1;
+
+    if (instance->menubar_File_item_File_menu_items.separator2_item == NULL) {
+        instance->menubar_File_item_File_menu_items.separator2_item =
+            XtVaCreateManagedWidget("separator2_item",
+                xmSeparatorWidgetClass,
+                instance->menubar_File_item_File_menu,
+                XmNseparatorType, XmSHADOW_ETCHED_OUT,
+                NULL);
+    }
+    if (instance->menubar_File_item_File_menu_items.separator2_item == NULL)
+        return -1;
+
     label_xmstring = XmStringCreateLocalized("Quit");
     if (instance->menubar_File_item_File_menu_items.Quit_item == NULL) {
         instance->menubar_File_item_File_menu_items.Quit_item =
@@ -708,20 +830,6 @@ dtb_main_menubar_edit_item_edit_menu_create(
     XmString	label_xmstring = NULL;
     Arg	args[6];	/* need 1 args (add 5 to be safe) */
     int	n = 0;
-    static String	menubar_Edit_item_Edit_menu_names[] =
-    {
-        "items_item", "items_item2", "items_item3"
-    };
-    static String	menubar_Edit_item_Edit_menu_strings[] =
-    {
-        "Speed settings...", "Character set...", "Morse code..."
-    };
-    int	i = 0;
-    static String	menubar_Edit_item_Edit_menu_mnemonics[] =
-    {
-        "S", "C", "M"
-    };
-    Widget	menubar_Edit_item_Edit_menu_items[3];
     
     if (instance->menubar_Edit_item_Edit_menu == NULL) {
         n = 0;
@@ -733,21 +841,77 @@ dtb_main_menubar_edit_item_edit_menu_create(
     if (instance->menubar_Edit_item_Edit_menu == NULL)
         return -1;
 
-    for (i = 0; i < XtNumber(menubar_Edit_item_Edit_menu_strings); i++)
-    {
-        label_xmstring = XmStringCreateLocalized(menubar_Edit_item_Edit_menu_strings[i]);
-        menubar_Edit_item_Edit_menu_items[i] = XtVaCreateWidget(menubar_Edit_item_Edit_menu_names[i],
-            xmPushButtonWidgetClass,
-            instance->menubar_Edit_item_Edit_menu,
-            XmNmnemonic, menubar_Edit_item_Edit_menu_mnemonics[i]? (KeySym)XStringToKeysym(menubar_Edit_item_Edit_menu_mnemonics[i]) : (KeySym)NULL,
-            XmNlabelString, label_xmstring,
-            NULL);
+    label_xmstring = XmStringCreateLocalized("Speed settings...");
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item == NULL) {
+        instance->menubar_Edit_item_Edit_menu_items.items_item =
+            XtVaCreateManagedWidget("items_item",
+                xmPushButtonWidgetClass,
+                instance->menubar_Edit_item_Edit_menu,
+                XmNmnemonic, XStringToKeysym("S"),
+                XmNlabelString, label_xmstring,
+                NULL);
         XmStringFree(label_xmstring);
         label_xmstring = NULL;
     }
-    instance->menubar_Edit_item_Edit_menu_items.items_item = menubar_Edit_item_Edit_menu_items[0];
-    instance->menubar_Edit_item_Edit_menu_items.items_item2 = menubar_Edit_item_Edit_menu_items[1];
-    instance->menubar_Edit_item_Edit_menu_items.items_item3 = menubar_Edit_item_Edit_menu_items[2];
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item == NULL)
+        return -1;
+
+    label_xmstring = XmStringCreateLocalized("Character set...");
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item4 == NULL) {
+        instance->menubar_Edit_item_Edit_menu_items.items_item4 =
+            XtVaCreateManagedWidget("items_item4",
+                xmPushButtonWidgetClass,
+                instance->menubar_Edit_item_Edit_menu,
+                XmNmnemonic, XStringToKeysym("C"),
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item4 == NULL)
+        return -1;
+
+    label_xmstring = XmStringCreateLocalized("Morse code...");
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item2 == NULL) {
+        instance->menubar_Edit_item_Edit_menu_items.items_item2 =
+            XtVaCreateManagedWidget("items_item2",
+                xmPushButtonWidgetClass,
+                instance->menubar_Edit_item_Edit_menu,
+                XmNmnemonic, XStringToKeysym("M"),
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item2 == NULL)
+        return -1;
+
+    if (instance->menubar_Edit_item_Edit_menu_items.separator1_item == NULL) {
+        instance->menubar_Edit_item_Edit_menu_items.separator1_item =
+            XtVaCreateManagedWidget("separator1_item",
+                xmSeparatorWidgetClass,
+                instance->menubar_Edit_item_Edit_menu,
+                XmNseparatorType, XmSHADOW_ETCHED_OUT,
+                NULL);
+    }
+    if (instance->menubar_Edit_item_Edit_menu_items.separator1_item == NULL)
+        return -1;
+
+    label_xmstring = XmStringCreateLocalized("Device configuration...");
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item3 == NULL) {
+        instance->menubar_Edit_item_Edit_menu_items.items_item3 =
+            XtVaCreateManagedWidget("items_item3",
+                xmPushButtonWidgetClass,
+                instance->menubar_Edit_item_Edit_menu,
+                XmNmnemonic, XStringToKeysym("D"),
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->menubar_Edit_item_Edit_menu_items.items_item3 == NULL)
+        return -1;
+
     return 0;
 }
 

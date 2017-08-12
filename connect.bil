@@ -2,11 +2,11 @@
 :module connect
 (
 
-:element connect
+:element connect_manual
 (
 	:type			:dialog
 	:bg-color		"white"
-	:label			"Connect"
+	:label			"Manual Connect"
 	:resizable		:false
 	:visible		:false
 	:default-button		connect_ok
@@ -136,6 +136,108 @@
 	:east-attachment	(:grid-line 90 0)
 	:west-attachment	(:grid-line 70 0)
 )
+:element authDialog
+(
+	:type			:dialog
+	:bg-color		"white"
+	:label			"Authenticate"
+	:resizable		:false
+	:visible		:false
+	:default-button		pw_ok
+	:children		(
+		controlpane3
+		dialog_button_panel3
+	)
+)
+:element controlpane3
+(
+	:type			:container
+	:container-type		:relative
+	:x			87
+	:y			28
+	:width			380
+	:height			55
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		separator3
+		password
+	)
+)
+:element separator3
+(
+	:type			:separator
+	:line-style		:etched-in
+	:orientation		:horizontal
+	:x			60
+	:y			144
+	:height			10
+	:visible		:true
+	:north-attachment	(:obj password 5)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element password
+(
+	:type			:text-field
+	:text-type		:alphanumeric
+	:x			52
+	:y			9
+	:label-type		:string
+	:label			"Password: "
+	:label-position		:west
+	:num-columns		20
+	:max-length		80
+	:read-only		:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 10)
+	:west-attachment	(:point 0 50)
+)
+:element dialog_button_panel3
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		pw_ok
+		pw_cancel
+	)
+)
+:element pw_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 40 0)
+	:west-attachment	(:grid-line 20 0)
+)
+:element pw_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 80 0)
+	:west-attachment	(:grid-line 60 0)
+)
 :element netunreach
 (
 	:type			:message
@@ -157,6 +259,121 @@
 	:help-button		:true
 	:default-button		:cancel-button
 )
+:element connect
+(
+	:type			:dialog
+	:bg-color		"white"
+	:label			"Connect"
+	:resizable		:true
+	:visible		:false
+	:children		(
+		controlpane2
+		dialog_button_panel2
+	)
+)
+:element controlpane2
+(
+	:type			:container
+	:container-type		:relative
+	:x			60
+	:y			15
+	:width			380
+	:height			185
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		list
+		separator2
+	)
+)
+:element list
+(
+	:type			:list
+	:x			105
+	:y			42
+	:width			380
+	:height			170
+	:selection-mode		:browse
+	:selection-required	:false
+	:num-rows		-1
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 15)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element separator2
+(
+	:type			:separator
+	:line-style		:etched-in
+	:orientation		:horizontal
+	:x			43
+	:y			148
+	:height			10
+	:visible		:true
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element dialog_button_panel2
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		con_ok
+		con_manual
+		con_cancel
+	)
+)
+:element con_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Ok"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 30 0)
+	:west-attachment	(:grid-line 10 0)
+)
+:element con_manual
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Manual"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 60 0)
+	:west-attachment	(:grid-line 40 0)
+)
+:element con_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 90 0)
+	:west-attachment	(:grid-line 70 0)
+)
 :connection
 (
 	:from			connect_ok
@@ -174,6 +391,22 @@
 :connection
 (
 	:from			connect_cancel
+	:to			connect_manual
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			connect_manual
+	:when			:show
+	:action-type		:call-function
+	:action			doRescan
+)
+:connection
+(
+	:from			con_ok
 	:to			connect
 	:when			:activate
 	:action-type		:builtin
@@ -182,9 +415,27 @@
 )
 :connection
 (
+	:from			con_cancel
+	:to			connect
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			con_manual
+	:to			connect_manual
+	:when			:activate
+	:action-type		:builtin
+	:action			:show
+	:arg-type		:void
+)
+:connection
+(
 	:from			connect
 	:when			:show
 	:action-type		:call-function
-	:action			doRescan
+	:action			doSAP
 )
 )

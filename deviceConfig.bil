@@ -1,0 +1,177 @@
+:bil-version	1 0
+:module deviceConfig
+(
+
+:element devConfig
+(
+	:type			:dialog
+	:bg-color		"white"
+	:label			"Device Config"
+	:resizable		:false
+	:visible		:false
+	:default-button		devconf_ok
+	:children		(
+		controlpane
+		dialog_button_panel
+	)
+)
+:element controlpane
+(
+	:type			:container
+	:container-type		:relative
+	:x			0
+	:y			0
+	:width			380
+	:height			247
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:north-attachment	(:point 0 0)
+	:south-attachment	(:point 0 0)
+	:east-attachment	(:obj devConfig 0)
+	:west-attachment	(:point 0 0)
+	:children		(
+		label
+		call
+		devkey
+		devname
+		separator
+	)
+)
+:element label
+(
+	:type			:label
+	:x			22
+	:y			13
+	:label-type		:string
+	:label			"Device Key:"
+	:label-alignment	:center
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 10)
+	:west-attachment	(:point 0 5)
+)
+:element call
+(
+	:type			:text-field
+	:text-type		:alphanumeric
+	:x			16
+	:y			158
+	:label-type		:string
+	:label			"Call: "
+	:label-position		:north
+	:num-columns		8
+	:max-length		8
+	:read-only		:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj devname 5)
+	:west-attachment	(:point 0 5)
+)
+:element devkey
+(
+	:type			:text-pane
+	:text-type		:alphanumeric
+	:x			15
+	:y			39
+	:border-frame		:none
+	:num-rows		4
+	:num-columns		32
+	:hscrollbar		:never
+	:vscrollbar		:always
+	:word-wrap		:true
+	:read-only		:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj label 5)
+	:west-attachment	(:point 0 5)
+)
+:element devname
+(
+	:type			:text-field
+	:text-type		:alphanumeric
+	:x			11
+	:y			159
+	:label-type		:string
+	:label			"Device Name: "
+	:label-position		:north
+	:num-columns		30
+	:max-length		40
+	:initial-value		"Telegraphy"
+	:read-only		:false
+	:active			:true
+	:visible		:true
+	:north-attachment	(:obj devkey 5)
+	:west-attachment	(:point 0 5)
+)
+:element separator
+(
+	:type			:separator
+	:line-style		:etched-in
+	:orientation		:horizontal
+	:x			35
+	:y			250
+	:height			10
+	:visible		:true
+	:north-attachment	(:obj call 5)
+	:east-attachment	(:point 0 0)
+	:west-attachment	(:point 0 0)
+)
+:element dialog_button_panel
+(
+	:type			:container
+	:container-type		:button-panel
+	:height			48
+	:visible		:true
+	:active			:true
+	:border-frame		:none
+	:children		(
+		devconf_ok
+		devconf_cancel
+	)
+)
+:element devconf_ok
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"OK"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 40 0)
+	:west-attachment	(:grid-line 20 0)
+)
+:element devconf_cancel
+(
+	:type			:button
+	:button-type		:push-button
+	:label-type		:string
+	:label-alignment	:center
+	:label			"Cancel"
+	:active			:true
+	:visible		:true
+	:north-attachment	(:point 0 5)
+	:east-attachment	(:grid-line 80 0)
+	:west-attachment	(:grid-line 60 0)
+)
+:connection
+(
+	:from			devconf_ok
+	:to			devConfig
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			devconf_cancel
+	:to			devConfig
+	:when			:activate
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+)

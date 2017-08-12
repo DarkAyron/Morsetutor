@@ -345,7 +345,7 @@ dontDeselect(
 		dtb_charset_dont_deselect_initialize(&dtb_charset_dont_deselect);
 	}
 
-	dtb_show_message(dtb_charset_charset_dialog.charsetDialog, &dtb_charset_dont_deselect, NULL, NULL);
+	dtb_show_modal_message(dtb_charset_charset_dialog.charsetDialog, &dtb_charset_dont_deselect, NULL, NULL, NULL);
 
 	XtVaSetValues(widget, XmNset, 1, NULL);
 

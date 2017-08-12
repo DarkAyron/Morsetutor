@@ -101,5 +101,7 @@ extern struct configuration vConfiguration;
 int getCharIndex(char c);
 void charsetSet(char c, int b);
 char getIndexedChar(int i);
+int readConfig();
+int writeConfig();
 
 #endif /* CONFIGURATION_H_ */

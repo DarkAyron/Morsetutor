@@ -77,10 +77,89 @@
 
 #include <stdint.h>
 #include <netipx/ipx.h>
+#include <X11/Intrinsic.h>
 
-int getAvailableNetworks(uint32_t *networks, size_t buffersize, uint32_t *defaultnet);
+typedef uint8_t IPXNode[6];
+typedef uint32_t IPXNet;
+typedef uint16_t IPXPort;
+typedef uint16_t hop_t;
+typedef uint16_t tick_t;
 
+#pragma pack(push, 1)
+struct alchemyHeader {
+	uint8_t flags;
+	uint32_t seqnum;
+};
 
+struct commandHeader {
+	uint8_t major;
+	uint8_t minor;
+};
+#pragma pack(pop)
+
+/******* SAP *******/
+#define IPX_SAP_PORT		(0x452U)
+#define IPX_SAP_PTYPE		(4U)
+#define IPX_SAP_OP_REQUEST	(1U)
+#define IPX_SAP_GENERAL_RQ	(0xFFFFU)
+#define IPX_SAP_OP_RESPONSE	(2U)
+#define IPX_SAP_OP_GNS_REQUEST	(3U)
+#define IPX_SAP_OP_GNS_RESPONSE	(4U)
+#define IPX_SAP_MAX_ENTRIES	(7U)
+#define IPX_SAP_SERVER_DOWN	(16U)
+#define IPX_SAP_SERVER_NAME_LEN	(48U)
+#define IPX_SAP_REQUEST_LEN	(4U)
+
+#define IPX_SAP_TYPE_HAMRADIO	(0x4357U)
+
+typedef uint16_t ser_type_t;
+typedef char ser_name_t[IPX_SAP_SERVER_NAME_LEN];
+
+#pragma pack(push, 1)
+struct sap_entry
+{
+	ser_type_t ser_type;
+	ser_name_t ser_name;
+	IPXNet network;
+	IPXNode node;
+	IPXPort port;
+	hop_t hops;
+};
+
+struct sap_packet
+{
+	uint16_t operation;
+	struct sap_entry   sap_entries[IPX_SAP_MAX_ENTRIES];
+};
+
+struct sap_request
+{
+	uint16_t operation;
+	ser_type_t ser_type;
+};
+#pragma pack(pop)
+
+struct networkStatus {
+	int stop;
+
+};
+
+extern volatile struct networkStatus vNetworkStatus;
+
+#define ALC_FLAG_CON 1
+#define ALC_FLAG_REJ 2
+#define ALC_FLAG_ACK 4
+#define ALC_FLAG_FIN 8
+#define ALC_FLAG_CONLESS 16
+#define ALC_FLAG_COMMAND 32
+
+#define IPXTYPE_ALCHEMY	0x66
+
+int getAvailableNetworks(IPXNet *networks, size_t buffersize, IPXNet *defaultnet);
+int networkInit();
+int networkConnect(const IPXNode *node, IPXNet network, IPXPort port);
+void networkShutdown();
+struct sap_entry *requestSAP(Cardinal *n_entries);
 
 
 #endif /* NETWORK_H_ */

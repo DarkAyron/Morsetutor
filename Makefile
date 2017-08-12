@@ -22,7 +22,7 @@
         ANSI_DEFINES = 
 
         CDEBUGFLAGS = -g
-        COPTFLAGS = -O2
+        COPTFLAGS = 
         SYS_LIBRARIES = -lm
         ALLX_LIBPATH = 
         ALLX_LDFLAGS = -L$(ALLX_LIBPATH) -R$(ALLX_LIBPATH)
@@ -45,14 +45,16 @@ TARGETS.h = \
 	main_ui.h \
 	settings_ui.h \
 	charset_ui.h \
-	connect_ui.h
+	connect_ui.h \
+	deviceConfig_ui.h
 
 TARGETS.c = \
 	dtb_utils.c \
 	main_ui.c \
 	settings_ui.c \
 	charset_ui.c \
-	connect_ui.c
+	connect_ui.c \
+	deviceConfig_ui.c
 
 TARGETS.h.merged = \
 	morsetutor.h
@@ -62,7 +64,8 @@ TARGETS.c.merged = \
 	main_stubs.c \
 	settings_stubs.c \
 	charset_stubs.c \
-	connect_stubs.c
+	connect_stubs.c \
+	deviceConfig_stubs.c
 
 SOURCES.h = $(TARGETS.h.merged) $(TARGETS.h)
 
@@ -79,6 +82,8 @@ OBJS = \
 	charset_stubs.o \
 	connect_ui.o \
 	connect_stubs.o \
+	deviceConfig_ui.o \
+	deviceConfig_stubs.o \
 	network.o \
 	configuration.o
 
@@ -109,6 +114,9 @@ charset_stubs.o: charset_stubs.c charset_ui.h
 connect_ui.o: connect_ui.c connect_ui.h
 connect_stubs.o: connect_stubs.c connect_ui.h
 
+deviceConfig_ui.o : deviceConfig_ui.c deviceConfig_ui.h
+deviceConfig_stubs.o : deviceConfig_stubs.c deviceConfig_ui.h
+
 CLEAN_FILES =	core .dtcodegen.log *.BAK *.delta \
 		$(PROGRAM) $(OBJS)
 clean:
@@ -116,3 +124,7 @@ clean:
 
 dtbclean:
 	$(RM)  $(CLEAN_FILES) $(TARGETS.c) $(TARGETS.h)
+
+patch:
+	patch -p2 < nocde.diff
+	patch -p2 < 64bit.diff

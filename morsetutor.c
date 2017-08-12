@@ -30,6 +30,7 @@
 #include "settings_ui.h"
 #include "charset_ui.h"
 #include "connect_ui.h"
+#include "deviceConfig_ui.h"
 #include "morsetutor.h"
 #include "dtb_utils.h"
 
@@ -44,6 +45,7 @@
 #include <pthread.h>
 
 #include "configuration.h"
+#include "network.h"
 
 void doQuit(Widget widget, XtPointer clientData, XtPointer callData);
 
@@ -107,6 +109,7 @@ main(
     Atom       WM_DELETE_WINDOW;
     
     XtToolkitThreadInitialize();
+    XtSetLanguageProc(NULL, (XtLanguageProc)NULL, NULL);
 
     /*** DTB_USER_CODE_END
      ***
@@ -165,13 +168,17 @@ main(
      */
     dtbMainMainwindowInfo_clear(&dtb_main_mainwindow);
     dtbMainAboutInfo_clear(&dtb_main_about);
+    dtbMainFileSelnInfo_clear(&dtb_main_file_seln);
     dtbSettingsSpeedDialogInfo_clear(&dtb_settings_speed_dialog);
     dtbSettingsCodeDialogInfo_clear(&dtb_settings_code_dialog);
     dtbCharsetCharsetDialogInfo_clear(&dtb_charset_charset_dialog);
     dtb_charset_dont_deselect_initialize(&dtb_charset_dont_deselect);
-    dtbConnectConnectInfo_clear(&dtb_connect_connect);
+    dtbConnectConnectManualInfo_clear(&dtb_connect_connect_manual);
+    dtbConnectAuthDialogInfo_clear(&dtb_connect_auth_dialog);
     dtb_connect_netunreach_initialize(&dtb_connect_netunreach);
     dtb_connect_noderesponse_initialize(&dtb_connect_noderesponse);
+    dtbConnectConnectInfo_clear(&dtb_connect_connect);
+    dtbDeviceConfigDevConfigInfo_clear(&dtb_device_config_dev_config);
     
     /*
      * Set up the application's root (primary) window.
@@ -228,7 +235,10 @@ main(
      ***      All automatic initialization is complete. Add any additional
      *** code that should be executed before the Xt main loop is entered.
      ***/
-    
+    if (!networkInit()) {
+	    dtb_connect_netunreach_initialize(&dtb_connect_netunreach);
+	    dtb_show_modal_message(toplevel, &dtb_connect_netunreach, NULL, NULL, NULL);
+    }
     /*** DTB_USER_CODE_END
      ***
      *** End of user code section

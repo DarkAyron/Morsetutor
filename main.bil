@@ -23,7 +23,9 @@
 		settings.codeDialog
 		charset.charsetDialog
 		about
-		connect.connect
+		connect.connect_manual
+		connect.authDialog
+		deviceConfig.devConfig
 	)
 )
 :element menubar
@@ -301,6 +303,8 @@
 	:children		(
 		File_menu_items_item
 		File_menu_separator1_item
+		File_menu_items_item2
+		File_menu_separator2_item
 		File_menu_Quit_item
 	)
 )
@@ -314,6 +318,23 @@
 	:active			:true
 )
 :element File_menu_separator1_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:separator
+	:line-style		:etched-out
+	:active			:true
+)
+:element File_menu_items_item2
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Open..."
+	:mnemonic		"O"
+	:active			:true
+)
+:element File_menu_separator2_item
 (
 	:type			:item
 	:item-type		:item-for-menu
@@ -336,7 +357,9 @@
 	:tear-off		:false
 	:children		(
 		Edit_menu_items_item
+		Edit_menu_items_item4
 		Edit_menu_items_item2
+		Edit_menu_separator1_item
 		Edit_menu_items_item3
 	)
 )
@@ -349,7 +372,7 @@
 	:mnemonic		"S"
 	:active			:true
 )
-:element Edit_menu_items_item2
+:element Edit_menu_items_item4
 (
 	:type			:item
 	:item-type		:item-for-menu
@@ -358,13 +381,30 @@
 	:mnemonic		"C"
 	:active			:true
 )
-:element Edit_menu_items_item3
+:element Edit_menu_items_item2
 (
 	:type			:item
 	:item-type		:item-for-menu
 	:label-type		:string
 	:label			"Morse code..."
 	:mnemonic		"M"
+	:active			:true
+)
+:element Edit_menu_separator1_item
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:separator
+	:line-style		:etched-out
+	:active			:true
+)
+:element Edit_menu_items_item3
+(
+	:type			:item
+	:item-type		:item-for-menu
+	:label-type		:string
+	:label			"Device configuration..."
+	:mnemonic		"D"
 	:active			:true
 )
 :element Training_menu
@@ -400,6 +440,15 @@
 	:label			"About..."
 	:mnemonic		"A"
 	:active			:true
+)
+:element file_seln
+(
+	:type			:file-chooser
+	:visible		:false
+	:label			"Open training file"
+	:ok-label		"Ok"
+	:auto-dismiss		:true
+	:file-type-mask		:regular
 )
 :connection
 (
@@ -461,14 +510,14 @@
 )
 :connection
 (
-	:from			Edit_menu_items_item2
+	:from			Edit_menu_items_item4
 	:when			:activate
 	:action-type		:call-function
 	:action			showCharset
 )
 :connection
 (
-	:from			Edit_menu_items_item3
+	:from			Edit_menu_items_item2
 	:when			:activate
 	:action-type		:call-function
 	:action			showCode
@@ -509,5 +558,39 @@
 	:when			:destroy
 	:action-type		:call-function
 	:action			doQuit
+)
+:connection
+(
+	:from			file_seln
+	:to			file_seln
+	:when			:ok
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			file_seln
+	:to			file_seln
+	:when			:cancel
+	:action-type		:builtin
+	:action			:hide
+	:arg-type		:void
+)
+:connection
+(
+	:from			Edit_menu_items_item3
+	:when			:activate
+	:action-type		:call-function
+	:action			editDeviceConfig
+)
+:connection
+(
+	:from			File_menu_items_item2
+	:to			file_seln
+	:when			:activate
+	:action-type		:builtin
+	:action			:show
+	:arg-type		:void
 )
 )

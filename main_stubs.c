@@ -38,6 +38,7 @@
 #include "connect_ui.h"
 #include "settings_ui.h"
 #include "charset_ui.h"
+#include "network.h"
 
 /*** DTB_USER_CODE_END
  ***
@@ -93,6 +94,81 @@ main_Help_menu_items_item_CB1(
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
 
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+main_file_seln_CB1(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    DtbMainFileSelnInfo	dtbTarget = (DtbMainFileSelnInfo)clientData;
+    DtbMainFileSelnInfo	instance = dtbTarget;	/* obsolete */
+    
+    if (!(dtbTarget->initialized))
+    {
+        dtb_main_file_seln_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+    }
+    XtUnmanageChild(instance->file_seln);
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    printf("action: main_file_seln_CB1()\n");
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+main_file_seln_CB2(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    DtbMainFileSelnInfo	dtbTarget = (DtbMainFileSelnInfo)clientData;
+    DtbMainFileSelnInfo	instance = dtbTarget;	/* obsolete */
+    
+    if (!(dtbTarget->initialized))
+    {
+        dtb_main_file_seln_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+    }
+    XtUnmanageChild(instance->file_seln);
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    printf("action: main_file_seln_CB2()\n");
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+main_File_menu_items_item2_CB1(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    DtbMainFileSelnInfo	dtbTarget = (DtbMainFileSelnInfo)clientData;
+    DtbMainFileSelnInfo	instance = dtbTarget;	/* obsolete */
+    
+    if (!(dtbTarget->initialized))
+    {
+        dtb_main_file_seln_initialize(dtbTarget, dtb_main_mainwindow.mainwindow);
+    }
+    XtManageChild(instance->file_seln);
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
+    printf("action: main_File_menu_items_item2_CB1()\n");
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 
@@ -182,6 +258,7 @@ doQuit(
     
     /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
 	writeConfig();
+	networkShutdown();
 	exit(0);
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
@@ -299,6 +376,21 @@ sendToRadio(
 	} else {
 		dtb_set_label_from_image_file(dtb_main_mainwindow.sendButton, "send.m");
 	}
+    /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
+}
+
+
+void 
+editDeviceConfig(
+    Widget widget,
+    XtPointer clientData,
+    XtPointer callData
+)
+{
+    /*** DTB_USER_CODE_START vvv Add C variables and code below vvv ***/
+    /*** DTB_USER_CODE_END   ^^^ Add C variables and code above ^^^ ***/
+    
+    /*** DTB_USER_CODE_START vvv Add C code below vvv ***/
     /*** DTB_USER_CODE_END   ^^^ Add C code above ^^^ ***/
 }
 

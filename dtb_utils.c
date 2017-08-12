@@ -1010,17 +1010,18 @@ dtb_MessageBoxGetActionButton(
     int			i, numChildren = 0;
     WidgetList		children = NULL;
     Widget		action_button = NULL;
-    int			button = -1;
+    int			button[2];
     Boolean		Found = False;
 
     XtVaGetValues(msg_dlg,
 			XmNnumChildren, &numChildren,
 			XmNchildren, &children,
 			NULL);
+    button[0] = -1;
     for (i = 0; i < numChildren && !Found; i++)
     {
-	XtVaGetValues(children[i], XmNuserData, &button, NULL);
-	if (which_btn == (DTB_BUTTON) button)
+	XtVaGetValues(children[i], XmNuserData, button, NULL);
+	if (which_btn == (DTB_BUTTON) button[0])
 	{
 	    Found = True;
 	    action_button = children[i];

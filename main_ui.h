@@ -23,11 +23,15 @@
 typedef struct {
     Widget	items_item;
     Widget	separator1_item;
+    Widget	items_item2;
+    Widget	separator2_item;
     Widget	Quit_item;
 } MainFileMenuItemsRec, *MainFileMenuItems;
 typedef struct {
     Widget	items_item;
+    Widget	items_item4;
     Widget	items_item2;
+    Widget	separator1_item;
     Widget	items_item3;
 } MainEditMenuItemsRec, *MainEditMenuItems;
 typedef struct {
@@ -96,15 +100,25 @@ typedef struct
     Widget	about_ok;
 } DtbMainAboutInfoRec, *DtbMainAboutInfo;
 
+typedef struct
+{
+    Boolean	initialized;
+    
+    Widget	file_seln_shell;	/* object "file_seln" */
+    Widget	file_seln;
+} DtbMainFileSelnInfoRec, *DtbMainFileSelnInfo;
+
 
 extern DtbMainMainwindowInfoRec dtb_main_mainwindow;
 extern DtbMainAboutInfoRec dtb_main_about;
+extern DtbMainFileSelnInfoRec dtb_main_file_seln;
 
 /*
  * Structure Clear Procedures: These set the fields to NULL
  */
 int dtbMainMainwindowInfo_clear(DtbMainMainwindowInfo instance);
 int dtbMainAboutInfo_clear(DtbMainAboutInfo instance);
+int dtbMainFileSelnInfo_clear(DtbMainFileSelnInfo instance);
 
 /*
  * Structure Initialization Procedures: These create the widgets
@@ -115,6 +129,10 @@ int dtb_main_mainwindow_initialize(
 );
 int dtb_main_about_initialize(
     DtbMainAboutInfo	instance,
+    Widget	parent
+);
+int dtb_main_file_seln_initialize(
+    DtbMainFileSelnInfo	instance,
     Widget	parent
 );
 
@@ -171,6 +189,11 @@ void sendToRadio(
     XtPointer	clientData,
     XtPointer	callData
 );
+void editDeviceConfig(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
 
 /*
  * Connections
@@ -181,6 +204,21 @@ void main_about_ok_CB1(
     XtPointer	callData
 );
 void main_Help_menu_items_item_CB1(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void main_file_seln_CB1(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void main_file_seln_CB2(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void main_File_menu_items_item2_CB1(
     Widget	widget,
     XtPointer	clientData,
     XtPointer	callData

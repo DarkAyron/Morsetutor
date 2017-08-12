@@ -25,10 +25,10 @@ typedef struct
 {
     Boolean	initialized;
     
-    Widget	connect;	/* object "connect" */
-    Widget	connect_shellform;
-    Widget	connect_panedwin;
-    Widget	connect_form;
+    Widget	connect_manual;	/* object "connect_manual" */
+    Widget	connect_manual_shellform;
+    Widget	connect_manual_panedwin;
+    Widget	connect_manual_form;
     
     Widget	dialog_button_panel;
     Widget	controlpane;
@@ -46,29 +46,83 @@ typedef struct
     Widget	connect_ok;
     Widget	connect_rescan;
     Widget	connect_cancel;
+} DtbConnectConnectManualInfoRec, *DtbConnectConnectManualInfo;
+
+typedef struct
+{
+    Boolean	initialized;
+    
+    Widget	authDialog;	/* object "authDialog" */
+    Widget	authDialog_shellform;
+    Widget	authDialog_panedwin;
+    Widget	authDialog_form;
+    
+    Widget	dialog_button_panel3;
+    Widget	controlpane3;
+    Widget	separator3;
+    
+    Widget	password_rowcolumn;	/* object "password" */
+    Widget	password_label;
+    Widget	password;
+    
+    Widget	pw_ok;
+    Widget	pw_cancel;
+} DtbConnectAuthDialogInfoRec, *DtbConnectAuthDialogInfo;
+
+
+
+typedef struct
+{
+    Boolean	initialized;
+    
+    Widget	connect;	/* object "connect" */
+    Widget	connect_shellform;
+    Widget	connect_panedwin;
+    Widget	connect_form;
+    
+    Widget	dialog_button_panel2;
+    Widget	controlpane2;
+    
+    Widget	list_scrolledwin;	/* object "list" */
+    Widget	list;
+    
+    Widget	separator2;
+    Widget	con_ok;
+    Widget	con_manual;
+    Widget	con_cancel;
 } DtbConnectConnectInfoRec, *DtbConnectConnectInfo;
 
 
-
-
-extern DtbConnectConnectInfoRec dtb_connect_connect;
+extern DtbConnectConnectManualInfoRec dtb_connect_connect_manual;
+extern DtbConnectAuthDialogInfoRec dtb_connect_auth_dialog;
 extern DtbMessageDataRec dtb_connect_netunreach;
 extern DtbMessageDataRec dtb_connect_noderesponse;
+extern DtbConnectConnectInfoRec dtb_connect_connect;
 
 /*
  * Structure Clear Procedures: These set the fields to NULL
  */
+int dtbConnectConnectManualInfo_clear(DtbConnectConnectManualInfo instance);
+int dtbConnectAuthDialogInfo_clear(DtbConnectAuthDialogInfo instance);
 int dtbConnectConnectInfo_clear(DtbConnectConnectInfo instance);
 
 /*
  * Structure Initialization Procedures: These create the widgets
  */
-int dtb_connect_connect_initialize(
-    DtbConnectConnectInfo	instance,
+int dtb_connect_connect_manual_initialize(
+    DtbConnectConnectManualInfo	instance,
+    Widget	parent
+);
+int dtb_connect_auth_dialog_initialize(
+    DtbConnectAuthDialogInfo	instance,
     Widget	parent
 );
 int dtb_connect_netunreach_initialize(DtbMessageData instance);
 int dtb_connect_noderesponse_initialize(DtbMessageData instance);
+int dtb_connect_connect_initialize(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
 
 /*
  * User Callbacks
@@ -83,11 +137,31 @@ void doRescan(
     XtPointer	clientData,
     XtPointer	callData
 );
+void doSAP(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
 
 /*
  * Connections
  */
 void connect_connect_cancel_CB1(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void connect_con_ok_CB1(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void connect_con_cancel_CB1(
+    Widget	widget,
+    XtPointer	clientData,
+    XtPointer	callData
+);
+void connect_con_manual_CB1(
     Widget	widget,
     XtPointer	clientData,
     XtPointer	callData

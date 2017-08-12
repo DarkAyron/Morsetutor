@@ -81,11 +81,33 @@
 #include <errno.h>
 #include <stdio.h>
 #include <netipx/ipx.h>
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/select.h>
+#include "network.h"
+#include <X11/Intrinsic.h>
 
+static struct sockaddr_ipx si_remote;
+static struct sockaddr_ipx si_local;
+static int ipxSocket;
 
-int getAvailableNetworks(uint32_t *networks, size_t buffersize, uint32_t *defaultNet)
+volatile struct networkStatus vNetworkStatus;
+
+const IPXNode broadcastNode = {
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+};
+
+static void networkSendCommand(int major, int minor)
+{
+
+}
+/****************************************************************************
+ * X11 Context
+ ****************************************************************************/
+
+int getAvailableNetworks(IPXNet *networks, size_t buffersize, IPXNet *defaultNet)
 {
 	FILE *routes;
 	char unused[25];
@@ -111,4 +133,175 @@ int getAvailableNetworks(uint32_t *networks, size_t buffersize, uint32_t *defaul
 	}
 
 	return n;
+}
+
+int networkInit()
+{
+	int one = 1;
+
+	ipxSocket = socket(AF_IPX, SOCK_DGRAM, 0);
+	if (ipxSocket < 0) {
+		return 0;
+	}
+
+	memset((char *) &si_local, 0, sizeof(si_local));
+	si_local.sipx_family = AF_IPX;
+	if (bind(ipxSocket, (struct sockaddr*)&si_local, sizeof(si_local)) < 0) {
+		return 0;
+	}
+
+	vNetworkStatus.stop = 0;
+	return 1;
+}
+
+int networkConnect(const IPXNode *node, IPXNet network, IPXPort port)
+{
+	memset(&si_remote, 0, sizeof(si_remote));
+	si_remote.sipx_family = AF_IPX;
+	si_remote.sipx_type = IPXTYPE_ALCHEMY;
+	memcpy(si_remote.sipx_node, node, 6);
+	si_remote.sipx_network = network;
+	si_remote.sipx_port = port;
+
+	return connect(ipxSocket, (struct sockaddr*)&si_remote, sizeof(si_remote));
+}
+
+int networkInterrogate()
+{
+
+}
+
+void networkShutdown()
+{
+	close(ipxSocket);
+}
+
+struct sap_entry *requestSAP(Cardinal *n_entries)
+{
+	struct sockaddr_ipx addr;
+	struct sap_request req;
+	struct sap_packet packet;
+	int sock;
+	size_t sendlen;
+	size_t sapLength;
+	size_t compareLength;
+	static int one = 1;
+	struct sap_entry *entries = NULL;
+	struct sap_entry *old_entries;
+	size_t len;
+	fd_set rfds;
+	struct timeval tv;
+	int retval;
+	int found = 0;
+	int n, m;
+
+	sapLength = sizeof(struct sap_entry);
+	compareLength = sizeof(struct sap_entry) - 2;
+	*n_entries = 0;
+
+	if ((sock = socket(AF_IPX, SOCK_DGRAM, 0)) < 0) {
+		return NULL;
+	}
+
+	if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one)) == -1) {
+		close(sock);
+		return NULL;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sipx_family = AF_IPX;
+	addr.sipx_type = IPX_SAP_PTYPE;
+
+	if (bind(sock, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
+		close(sock);
+		return NULL;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sipx_family = AF_IPX;
+	addr.sipx_port = htons(IPX_SAP_PORT);
+	addr.sipx_type = IPX_SAP_PTYPE;
+	addr.sipx_network = htonl(0x0);
+	memcpy(addr.sipx_node, broadcastNode, sizeof(IPXNode));
+
+	req.operation = htons(IPX_SAP_OP_REQUEST);
+	req.ser_type = htons(IPX_SAP_GENERAL_RQ);
+
+	sendlen = sizeof(struct sap_request);
+	if ((size_t)sendto(sock, &req, sendlen, 0,
+		   (struct sockaddr *) &addr, sizeof(addr)) != sendlen) {
+		close(sock);
+		return NULL;
+	}
+
+	while(1) {
+		FD_ZERO(&rfds);
+		FD_SET(sock, &rfds);
+
+		tv.tv_sec = 2;
+		tv.tv_usec = 0;
+
+		retval = select(sock + 1, &rfds, NULL, NULL, &tv);
+		if (retval > 0) {
+			len = recv(sock, &packet, sizeof(struct sap_packet), 0);
+			if (len < (2 + sapLength))
+				continue;
+			len -= 2;
+			if (ntohs(packet.operation) != IPX_SAP_OP_RESPONSE)
+				continue;
+
+			old_entries = entries;
+			entries = (struct sap_entry*)XtCalloc((*n_entries + 1) + (len / sapLength), sapLength);
+
+			if (old_entries) {
+				memcpy(entries, old_entries, *n_entries * sapLength);
+				XtFree((char*)old_entries);
+			}
+			for (n = 0; n < len / sapLength; n++) {
+				found = 0;
+				puts(packet.sap_entries[n].ser_name);
+				printf("%d\n", packet.sap_entries[n].hops);
+				for (m = 0; m < *n_entries; m++) {
+					if (!memcmp(&entries[m], &packet.sap_entries[n], compareLength)) {
+						if (entries[m].hops > packet.sap_entries[n].hops)
+							entries[m].hops = packet.sap_entries[n].hops;
+						found = 1;
+						break;
+					}
+				}
+				if (!found) {
+					memcpy(&(entries[(*n_entries)++]), &(packet.sap_entries[n]), sapLength);
+				}
+			}
+		} else {
+			break;
+		}
+	}
+	close(sock);
+	return entries;
+}
+
+/****************************************************************************
+ * Network Context
+ ****************************************************************************/
+
+void networkReceiveLoop()
+{
+	struct timeval timeout;
+	fd_set rfds;
+	int sockfd;
+	int result;
+
+	sockfd = ipxSocket;
+
+
+
+	while(!vNetworkStatus.stop) {
+		timeout.tv_sec = 1;
+		timeout.tv_usec = 0;
+
+		FD_ZERO(&rfds);
+		FD_SET(sockfd, &rfds);
+		result = select(sockfd + 1, &rfds, NULL, NULL, &timeout);
+	}
 }

@@ -18,68 +18,141 @@
 #include <Xm/Label.h>
 #include <Xm/TextF.h>
 #include <Xm/PushB.h>
+#include <Xm/ScrollBar.h>
+#include <Xm/ScrolledW.h>
+#include <Xm/List.h>
 #include "dtb_utils.h"
 #include "morsetutor.h"
 #include "connect_ui.h"
 
 
-DtbConnectConnectInfoRec	dtb_connect_connect = 
+DtbConnectConnectManualInfoRec	dtb_connect_connect_manual = 
+{
+    False	 /* initialized */
+};
+
+DtbConnectAuthDialogInfoRec	dtb_connect_auth_dialog = 
 {
     False	 /* initialized */
 };
 DtbMessageDataRec	dtb_connect_netunreach;
 DtbMessageDataRec	dtb_connect_noderesponse;
 
+DtbConnectConnectInfoRec	dtb_connect_connect = 
+{
+    False	 /* initialized */
+};
+
 /*
  * Widget create procedure decls
  */
+static int dtb_connect_connect_manual_create(
+    DtbConnectConnectManualInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_auth_dialog_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
 static int dtb_connect_connect_create(
     DtbConnectConnectInfo	instance,
     Widget	parent
 );
 static int dtb_connect_dialog_button_panel_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_controlpane_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_network_box_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_node_box_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_separator_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_connect_ok_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_connect_rescan_create(
-    DtbConnectConnectInfo	instance,
+    DtbConnectConnectManualInfo	instance,
     Widget	parent
 );
 static int dtb_connect_connect_cancel_create(
+    DtbConnectConnectManualInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_dialog_button_panel3_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_controlpane3_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_separator3_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_password_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_pw_ok_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_pw_cancel_create(
+    DtbConnectAuthDialogInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_dialog_button_panel2_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_controlpane2_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_list_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_separator2_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_con_ok_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_con_manual_create(
+    DtbConnectConnectInfo	instance,
+    Widget	parent
+);
+static int dtb_connect_con_cancel_create(
     DtbConnectConnectInfo	instance,
     Widget	parent
 );
 
 int 
-dtbConnectConnectInfo_clear(DtbConnectConnectInfo instance)
+dtbConnectConnectManualInfo_clear(DtbConnectConnectManualInfo instance)
 {
     memset((void *)(instance), 0, sizeof(*instance));
     return 0;
 }
 
 int 
-dtb_connect_connect_initialize(
-    DtbConnectConnectInfo instance,
+dtb_connect_connect_manual_initialize(
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -91,12 +164,12 @@ dtb_connect_connect_initialize(
     }
     instance->initialized = True;
 
-    dtb_connect_connect_create(instance,
+    dtb_connect_connect_manual_create(instance,
         parent);
     dtb_connect_dialog_button_panel_create(instance,
-        instance->connect_panedwin);
+        instance->connect_manual_panedwin);
     dtb_connect_controlpane_create(instance,
-        instance->connect_form);
+        instance->connect_manual_form);
     dtb_connect_network_box_create(instance,
         instance->controlpane);
     dtb_connect_node_box_create(instance,
@@ -114,7 +187,7 @@ dtb_connect_connect_initialize(
      * Add widget-reference resources.
      */
     
-    XtVaSetValues(instance->connect_shellform,
+    XtVaSetValues(instance->connect_manual_shellform,
         XmNdefaultButton, instance->connect_ok,
         NULL);
     
@@ -158,26 +231,26 @@ dtb_connect_connect_initialize(
     XtVaGetValues(instance->controlpane,
         XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
     XtManageChildren(children, numChildren);
-    XtVaGetValues(instance->connect_form,
+    XtVaGetValues(instance->connect_manual_form,
         XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
     XtManageChildren(children, numChildren);
     XtVaGetValues(instance->dialog_button_panel,
         XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
     XtManageChildren(children, numChildren);
-    XtManageChild(instance->connect_form);
+    XtManageChild(instance->connect_manual_form);
     XtManageChild(instance->dialog_button_panel);
-    XtVaGetValues(instance->connect_shellform,
+    XtVaGetValues(instance->connect_manual_shellform,
         XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
     XtManageChildren(children, numChildren);
     /*
      * Turn off traversal for invisible sash in dialog's PanedWindow
      */
-    dtb_remove_sash_focus(instance->connect_panedwin);
+    dtb_remove_sash_focus(instance->connect_manual_panedwin);
     
     /*
      * Add User and Connection callbacks
      */
-    	XtAddCallback(instance->connect,
+    	XtAddCallback(instance->connect_manual,
 		XmNpopupCallback, doRescan,
     		(XtPointer)&(*instance));
 	XtAddCallback(instance->connect_ok,
@@ -190,6 +263,105 @@ dtb_connect_connect_initialize(
 		XmNactivateCallback, connect_connect_cancel_CB1,
 		(XtPointer)&(*instance));
 return 0;
+}
+
+int 
+dtbConnectAuthDialogInfo_clear(DtbConnectAuthDialogInfo instance)
+{
+    memset((void *)(instance), 0, sizeof(*instance));
+    return 0;
+}
+
+int 
+dtb_connect_auth_dialog_initialize(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    WidgetList	children = NULL;
+    int		numChildren = 0;
+    if (instance->initialized)
+    {
+        return 0;
+    }
+    instance->initialized = True;
+
+    dtb_connect_auth_dialog_create(instance,
+        parent);
+    dtb_connect_dialog_button_panel3_create(instance,
+        instance->authDialog_panedwin);
+    dtb_connect_controlpane3_create(instance,
+        instance->authDialog_form);
+    dtb_connect_separator3_create(instance,
+        instance->controlpane3);
+    dtb_connect_password_create(instance,
+        instance->controlpane3);
+    dtb_connect_pw_ok_create(instance,
+        instance->dialog_button_panel3);
+    dtb_connect_pw_cancel_create(instance,
+        instance->dialog_button_panel3);
+    
+    /*
+     * Add widget-reference resources.
+     */
+    
+    XtVaSetValues(instance->authDialog_shellform,
+        XmNdefaultButton, instance->pw_ok,
+        NULL);
+    
+    XtVaSetValues(instance->separator3,
+        XmNtopWidget, instance->password_rowcolumn,
+        NULL);
+    
+    /*
+     * Call utility functions to do group layout
+     */
+    
+    /*
+     * Make Dialog Button-Panel & Footer a fixed height
+     */
+    {
+        Dimension	pane_height;
+
+        XtVaGetValues(instance->dialog_button_panel3,
+            XmNheight, &pane_height,
+            NULL);
+        XtVaSetValues(instance->dialog_button_panel3,
+            XmNpaneMinimum,   pane_height,
+            XmNpaneMaximum,   pane_height,
+            NULL);
+
+    }
+    
+    /*
+     * Manage the tree, from the bottom up.
+     */
+    XtVaGetValues(instance->password_rowcolumn,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtVaGetValues(instance->controlpane3,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtVaGetValues(instance->authDialog_form,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtVaGetValues(instance->dialog_button_panel3,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtManageChild(instance->authDialog_form);
+    XtManageChild(instance->dialog_button_panel3);
+    XtVaGetValues(instance->authDialog_shellform,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    /*
+     * Turn off traversal for invisible sash in dialog's PanedWindow
+     */
+    dtb_remove_sash_focus(instance->authDialog_panedwin);
+    
+    /*
+     * Add User and Connection callbacks
+     */
+    return 0;
 }
 
 int 
@@ -248,6 +420,281 @@ dtb_connect_noderesponse_initialize(DtbMessageData instance)
     return 0;
 }
 
+int 
+dtbConnectConnectInfo_clear(DtbConnectConnectInfo instance)
+{
+    memset((void *)(instance), 0, sizeof(*instance));
+    return 0;
+}
+
+int 
+dtb_connect_connect_initialize(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    WidgetList	children = NULL;
+    int		numChildren = 0;
+    if (instance->initialized)
+    {
+        return 0;
+    }
+    instance->initialized = True;
+
+    dtb_connect_connect_create(instance,
+        parent);
+    dtb_connect_dialog_button_panel2_create(instance,
+        instance->connect_panedwin);
+    dtb_connect_controlpane2_create(instance,
+        instance->connect_form);
+    dtb_connect_list_create(instance,
+        instance->controlpane2);
+    dtb_connect_separator2_create(instance,
+        instance->controlpane2);
+    dtb_connect_con_ok_create(instance,
+        instance->dialog_button_panel2);
+    dtb_connect_con_manual_create(instance,
+        instance->dialog_button_panel2);
+    dtb_connect_con_cancel_create(instance,
+        instance->dialog_button_panel2);
+    
+    /*
+     * Add widget-reference resources.
+     */
+    
+    /*
+     * Call utility functions to do group layout
+     */
+    
+    /*
+     * Make Dialog Button-Panel & Footer a fixed height
+     */
+    {
+        Dimension	pane_height;
+
+        XtVaGetValues(instance->dialog_button_panel2,
+            XmNheight, &pane_height,
+            NULL);
+        XtVaSetValues(instance->dialog_button_panel2,
+            XmNpaneMinimum,   pane_height,
+            XmNpaneMaximum,   pane_height,
+            NULL);
+
+    }
+    
+    /*
+     * Manage the tree, from the bottom up.
+     */
+    XtManageChild(instance->list);
+    XtVaGetValues(instance->controlpane2,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtVaGetValues(instance->connect_form,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtVaGetValues(instance->dialog_button_panel2,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    XtManageChild(instance->connect_form);
+    XtManageChild(instance->dialog_button_panel2);
+    XtVaGetValues(instance->connect_shellform,
+        XmNchildren, &children, XmNnumChildren, &numChildren, NULL);
+    XtManageChildren(children, numChildren);
+    /*
+     * Turn off traversal for invisible sash in dialog's PanedWindow
+     */
+    dtb_remove_sash_focus(instance->connect_panedwin);
+    
+    /*
+     * Add User and Connection callbacks
+     */
+    	XtAddCallback(instance->connect,
+		XmNpopupCallback, doSAP,
+    		(XtPointer)&(*instance));
+	XtAddCallback(instance->con_ok,
+		XmNactivateCallback, connect_con_ok_CB1,
+		(XtPointer)&(*instance));
+	XtAddCallback(instance->con_manual,
+		XmNactivateCallback, connect_con_manual_CB1,
+		(XtPointer)&dtb_connect_connect_manual);
+	XtAddCallback(instance->con_cancel,
+		XmNactivateCallback, connect_con_cancel_CB1,
+		(XtPointer)&(*instance));
+return 0;
+}
+
+
+
+static int 
+dtb_connect_connect_manual_create(
+    DtbConnectConnectManualInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    Display	*display= (parent == NULL? NULL:XtDisplay(parent));
+    Arg	args[8];	/* need 3 args (add 5 to be safe) */
+    int	n = 0;
+    
+    if (instance->connect_manual == NULL) {
+        n = 0;
+        XtSetArg(args[n], XmNallowShellResize, True);  ++n;
+        XtSetArg(args[n], XmNtitle, "Manual Connect");  ++n;
+        XtSetArg(args[n], XmNbackground, dtb_cvt_string_to_pixel(parent, "white"));  ++n;
+        instance->connect_manual =
+            XmCreateDialogShell(parent,
+                "dtb_connect_connect_manual", args, n);
+    }
+    if (instance->connect_manual == NULL)
+        return -1;
+
+    if (instance->connect_manual_shellform == NULL) {
+        instance->connect_manual_shellform =
+            XtVaCreateWidget("dtb_connect_connect_manual_shellform",
+                xmFormWidgetClass,
+                instance->connect_manual,
+                XmNnoResize, True,
+                XmNdefaultPosition, False,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNbackground, dtb_cvt_string_to_pixel(instance->connect_manual, "white"),
+                NULL);
+    }
+    if (instance->connect_manual_shellform == NULL)
+        return -1;
+
+    if (instance->connect_manual_panedwin == NULL) {
+        instance->connect_manual_panedwin =
+            XtVaCreateWidget("connect_manual_panedwin",
+                xmPanedWindowWidgetClass,
+                instance->connect_manual_shellform,
+                XmNbottomOffset, 0,
+                XmNbottomPosition, 100,
+                XmNbottomAttachment, XmATTACH_POSITION,
+                XmNrightOffset, 0,
+                XmNrightPosition, 100,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 0,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 0,
+                XmNtopPosition, 0,
+                XmNtopAttachment, XmATTACH_POSITION,
+                XmNsashWidth, 1,
+                XmNsashHeight, 1,
+                XmNspacing, 0,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNbackground, dtb_cvt_string_to_pixel(instance->connect_manual_shellform, "white"),
+                NULL);
+    }
+    if (instance->connect_manual_panedwin == NULL)
+        return -1;
+
+    if (instance->connect_manual_form == NULL) {
+        instance->connect_manual_form =
+            XtVaCreateWidget("connect_manual_form",
+                xmFormWidgetClass,
+                instance->connect_manual_panedwin,
+                XmNallowResize, True,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNresizePolicy, XmRESIZE_ANY,
+                XmNbackground, dtb_cvt_string_to_pixel(instance->connect_manual_panedwin, "white"),
+                NULL);
+    }
+    if (instance->connect_manual_form == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_auth_dialog_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    Display	*display= (parent == NULL? NULL:XtDisplay(parent));
+    Arg	args[8];	/* need 3 args (add 5 to be safe) */
+    int	n = 0;
+    
+    if (instance->authDialog == NULL) {
+        n = 0;
+        XtSetArg(args[n], XmNallowShellResize, True);  ++n;
+        XtSetArg(args[n], XmNtitle, "Authenticate");  ++n;
+        XtSetArg(args[n], XmNbackground, dtb_cvt_string_to_pixel(parent, "white"));  ++n;
+        instance->authDialog =
+            XmCreateDialogShell(parent,
+                "dtb_connect_authDialog", args, n);
+    }
+    if (instance->authDialog == NULL)
+        return -1;
+
+    if (instance->authDialog_shellform == NULL) {
+        instance->authDialog_shellform =
+            XtVaCreateWidget("dtb_connect_authDialog_shellform",
+                xmFormWidgetClass,
+                instance->authDialog,
+                XmNnoResize, True,
+                XmNdefaultPosition, False,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNbackground, dtb_cvt_string_to_pixel(instance->authDialog, "white"),
+                NULL);
+    }
+    if (instance->authDialog_shellform == NULL)
+        return -1;
+
+    if (instance->authDialog_panedwin == NULL) {
+        instance->authDialog_panedwin =
+            XtVaCreateWidget("authDialog_panedwin",
+                xmPanedWindowWidgetClass,
+                instance->authDialog_shellform,
+                XmNbottomOffset, 0,
+                XmNbottomPosition, 100,
+                XmNbottomAttachment, XmATTACH_POSITION,
+                XmNrightOffset, 0,
+                XmNrightPosition, 100,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 0,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 0,
+                XmNtopPosition, 0,
+                XmNtopAttachment, XmATTACH_POSITION,
+                XmNsashWidth, 1,
+                XmNsashHeight, 1,
+                XmNspacing, 0,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNbackground, dtb_cvt_string_to_pixel(instance->authDialog_shellform, "white"),
+                NULL);
+    }
+    if (instance->authDialog_panedwin == NULL)
+        return -1;
+
+    if (instance->authDialog_form == NULL) {
+        instance->authDialog_form =
+            XtVaCreateWidget("authDialog_form",
+                xmFormWidgetClass,
+                instance->authDialog_panedwin,
+                XmNallowResize, True,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNresizePolicy, XmRESIZE_ANY,
+                XmNbackground, dtb_cvt_string_to_pixel(instance->authDialog_panedwin, "white"),
+                NULL);
+    }
+    if (instance->authDialog_form == NULL)
+        return -1;
+
+    return 0;
+}
+
 
 
 static int 
@@ -278,7 +725,6 @@ dtb_connect_connect_create(
             XtVaCreateWidget("dtb_connect_connect_shellform",
                 xmFormWidgetClass,
                 instance->connect,
-                XmNnoResize, True,
                 XmNdefaultPosition, False,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
@@ -338,7 +784,7 @@ dtb_connect_connect_create(
 
 static int 
 dtb_connect_dialog_button_panel_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -367,7 +813,7 @@ dtb_connect_dialog_button_panel_create(
 
 static int 
 dtb_connect_controlpane_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -404,7 +850,7 @@ dtb_connect_controlpane_create(
 
 static int 
 dtb_connect_network_box_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -481,7 +927,7 @@ dtb_connect_network_box_create(
 
 static int 
 dtb_connect_node_box_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -547,7 +993,7 @@ dtb_connect_node_box_create(
 
 static int 
 dtb_connect_separator_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -581,7 +1027,7 @@ dtb_connect_separator_create(
 
 static int 
 dtb_connect_connect_ok_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -620,7 +1066,7 @@ dtb_connect_connect_ok_create(
 
 static int 
 dtb_connect_connect_rescan_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -659,7 +1105,7 @@ dtb_connect_connect_rescan_create(
 
 static int 
 dtb_connect_connect_cancel_create(
-    DtbConnectConnectInfo instance,
+    DtbConnectConnectManualInfo instance,
     Widget parent
 )
 {
@@ -689,6 +1135,512 @@ dtb_connect_connect_cancel_create(
         label_xmstring = NULL;
     }
     if (instance->connect_cancel == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_dialog_button_panel3_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->dialog_button_panel3 == NULL) {
+        instance->dialog_button_panel3 =
+            XtVaCreateWidget("dialog_button_panel3",
+                xmFormWidgetClass,
+                parent,
+                XmNpaneMaximum, 48,
+                XmNpaneMinimum, 48,
+                XmNresizePolicy, XmRESIZE_GROW,
+                XmNmarginHeight, 7,
+                XmNmarginWidth, 7,
+                XmNpositionIndex, 1,
+                XmNheight, 48,
+                NULL);
+    }
+    if (instance->dialog_button_panel3 == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_controlpane3_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->controlpane3 == NULL) {
+        instance->controlpane3 =
+            XtVaCreateWidget("controlpane3",
+                xmFormWidgetClass,
+                parent,
+                XmNbottomOffset, 0,
+                XmNbottomAttachment, XmATTACH_FORM,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopOffset, 0,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNresizePolicy, XmRESIZE_GROW,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNheight, 55,
+                XmNwidth, 380,
+                XmNy, 28,
+                XmNx, 87,
+                NULL);
+    }
+    if (instance->controlpane3 == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_separator3_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->separator3 == NULL) {
+        instance->separator3 =
+            XtVaCreateWidget("separator3",
+                xmSeparatorWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_WIDGET,
+                XmNseparatorType, XmSHADOW_ETCHED_IN,
+                XmNorientation, XmHORIZONTAL,
+                XmNheight, 10,
+                XmNy, 144,
+                XmNx, 60,
+                NULL);
+    }
+    if (instance->separator3 == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_password_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    Arg	args[25];	/* need 20 args (add 5 to be safe) */
+    int	n = 0;
+    
+    if (instance->password_rowcolumn == NULL) {
+        instance->password_rowcolumn =
+            XtVaCreateWidget("password_rowcolumn",
+                xmRowColumnWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightAttachment, XmATTACH_NONE,
+                XmNleftOffset, 50,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopOffset, 10,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNadjustLast, True,
+                XmNspacing, 0,
+                XmNmarginWidth, 0,
+                XmNmarginHeight, 0,
+                XmNentryAlignment, XmALIGNMENT_END,
+                XmNorientation, XmHORIZONTAL,
+                XmNy, 9,
+                XmNx, 52,
+                NULL);
+    }
+    if (instance->password_rowcolumn == NULL)
+        return -1;
+
+    label_xmstring = XmStringCreateLocalized("Password: ");
+    if (instance->password_label == NULL) {
+        instance->password_label =
+            XtVaCreateWidget("password_label",
+                xmLabelWidgetClass,
+                instance->password_rowcolumn,
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->password_label == NULL)
+        return -1;
+
+    if (instance->password == NULL) {
+        n = 0;
+        XtSetArg(args[n], XmNmaxLength, 80);  ++n;
+        XtSetArg(args[n], XmNeditable, True);  ++n;
+        XtSetArg(args[n], XmNcursorPositionVisible, True);  ++n;
+        XtSetArg(args[n], XmNcolumns, 20);  ++n;
+        instance->password =
+            XmCreateTextField(instance->password_rowcolumn,
+                "password", args, n);
+    }
+    if (instance->password == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_pw_ok_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    
+    label_xmstring = XmStringCreateLocalized("OK");
+    if (instance->pw_ok == NULL) {
+        instance->pw_ok =
+            XtVaCreateWidget("pw_ok",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightPosition, 40,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 20,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNdefaultButtonShadowThickness, 1,
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->pw_ok == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_pw_cancel_create(
+    DtbConnectAuthDialogInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    
+    label_xmstring = XmStringCreateLocalized("Cancel");
+    if (instance->pw_cancel == NULL) {
+        instance->pw_cancel =
+            XtVaCreateWidget("pw_cancel",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightPosition, 80,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 60,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNdefaultButtonShadowThickness, 1,
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->pw_cancel == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_dialog_button_panel2_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->dialog_button_panel2 == NULL) {
+        instance->dialog_button_panel2 =
+            XtVaCreateWidget("dialog_button_panel2",
+                xmFormWidgetClass,
+                parent,
+                XmNpaneMaximum, 48,
+                XmNpaneMinimum, 48,
+                XmNresizePolicy, XmRESIZE_GROW,
+                XmNmarginHeight, 7,
+                XmNmarginWidth, 7,
+                XmNpositionIndex, 1,
+                XmNheight, 48,
+                NULL);
+    }
+    if (instance->dialog_button_panel2 == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_controlpane2_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->controlpane2 == NULL) {
+        instance->controlpane2 =
+            XtVaCreateWidget("controlpane2",
+                xmFormWidgetClass,
+                parent,
+                XmNbottomOffset, 0,
+                XmNbottomAttachment, XmATTACH_FORM,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopOffset, 0,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNresizePolicy, XmRESIZE_GROW,
+                XmNmarginHeight, 0,
+                XmNmarginWidth, 0,
+                XmNheight, 185,
+                XmNwidth, 380,
+                XmNy, 15,
+                XmNx, 60,
+                NULL);
+    }
+    if (instance->controlpane2 == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_list_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    Arg	args[20];	/* need 15 args (add 5 to be safe) */
+    int	n = 0;
+    
+    
+    if (instance->list == NULL) {
+        n = 0;
+        XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmAUTOMATIC);  ++n;
+        XtSetArg(args[n], XmNlistSizePolicy, XmCONSTANT);  ++n;
+        XtSetArg(args[n], XmNselectionPolicy, XmBROWSE_SELECT);  ++n;
+        XtSetArg(args[n], XmNbottomOffset, 15);  ++n;
+        XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);  ++n;
+        XtSetArg(args[n], XmNrightOffset, 0);  ++n;
+        XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);  ++n;
+        XtSetArg(args[n], XmNleftOffset, 0);  ++n;
+        XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);  ++n;
+        XtSetArg(args[n], XmNtopOffset, 0);  ++n;
+        XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM);  ++n;
+        XtSetArg(args[n], XmNheight, 170);  ++n;
+        XtSetArg(args[n], XmNwidth, 380);  ++n;
+        XtSetArg(args[n], XmNy, 42);  ++n;
+        XtSetArg(args[n], XmNx, 105);  ++n;
+        instance->list =
+            XmCreateScrolledList(parent,
+                "list", args, n);
+    }
+    instance->list_scrolledwin = XtParent(instance->list);
+    
+    /* Due to bogosity in Motif, this silly thing seems to
+     * be created managed. The easiest thing to do is unmanage
+     * the widget so that it behaves in the same semi-rational
+     * way as the rest of the Motif widget set.
+     */
+    XtUnmanageChild(instance->list_scrolledwin);
+    
+    if (instance->list == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_separator2_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    
+    if (instance->separator2 == NULL) {
+        instance->separator2 =
+            XtVaCreateWidget("separator2",
+                xmSeparatorWidgetClass,
+                parent,
+                XmNbottomOffset, 0,
+                XmNbottomAttachment, XmATTACH_FORM,
+                XmNrightOffset, 0,
+                XmNrightAttachment, XmATTACH_FORM,
+                XmNleftOffset, 0,
+                XmNleftAttachment, XmATTACH_FORM,
+                XmNtopAttachment, XmATTACH_NONE,
+                XmNseparatorType, XmSHADOW_ETCHED_IN,
+                XmNorientation, XmHORIZONTAL,
+                XmNheight, 10,
+                XmNy, 148,
+                XmNx, 43,
+                NULL);
+    }
+    if (instance->separator2 == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_con_ok_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    
+    label_xmstring = XmStringCreateLocalized("Ok");
+    if (instance->con_ok == NULL) {
+        instance->con_ok =
+            XtVaCreateWidget("con_ok",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightPosition, 30,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 10,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->con_ok == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_con_manual_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    
+    label_xmstring = XmStringCreateLocalized("Manual");
+    if (instance->con_manual == NULL) {
+        instance->con_manual =
+            XtVaCreateWidget("con_manual",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightPosition, 60,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 40,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->con_manual == NULL)
+        return -1;
+
+    return 0;
+}
+
+
+
+static int 
+dtb_connect_con_cancel_create(
+    DtbConnectConnectInfo instance,
+    Widget parent
+)
+{
+    XmString	label_xmstring = NULL;
+    
+    label_xmstring = XmStringCreateLocalized("Cancel");
+    if (instance->con_cancel == NULL) {
+        instance->con_cancel =
+            XtVaCreateWidget("con_cancel",
+                xmPushButtonWidgetClass,
+                parent,
+                XmNbottomAttachment, XmATTACH_NONE,
+                XmNrightOffset, 0,
+                XmNrightPosition, 90,
+                XmNrightAttachment, XmATTACH_POSITION,
+                XmNleftOffset, 0,
+                XmNleftPosition, 70,
+                XmNleftAttachment, XmATTACH_POSITION,
+                XmNtopOffset, 5,
+                XmNtopAttachment, XmATTACH_FORM,
+                XmNrecomputeSize, True,
+                XmNalignment, XmALIGNMENT_CENTER,
+                XmNlabelString, label_xmstring,
+                NULL);
+        XmStringFree(label_xmstring);
+        label_xmstring = NULL;
+    }
+    if (instance->con_cancel == NULL)
         return -1;
 
     return 0;
