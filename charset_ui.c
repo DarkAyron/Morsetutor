@@ -641,11 +641,9 @@ dtb_charset_controlpane_create(
                 XmNleftAttachment, XmATTACH_FORM,
                 XmNtopOffset, 0,
                 XmNtopAttachment, XmATTACH_FORM,
-                XmNresizePolicy, XmRESIZE_GROW,
+                XmNresizePolicy, XmRESIZE_ANY,
                 XmNmarginHeight, 0,
                 XmNmarginWidth, 0,
-                XmNheight, 227,
-                XmNwidth, 542,
                 XmNy, 34,
                 XmNx, 36,
                 NULL);

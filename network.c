@@ -238,8 +238,8 @@ struct sap_entry *requestSAP(Cardinal *n_entries)
 		FD_ZERO(&rfds);
 		FD_SET(sock, &rfds);
 
-		tv.tv_sec = 2;
-		tv.tv_usec = 0;
+		tv.tv_sec = 0;
+		tv.tv_usec = 500000;
 
 		retval = select(sock + 1, &rfds, NULL, NULL, &tv);
 		if (retval > 0) {

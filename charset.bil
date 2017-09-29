@@ -21,8 +21,6 @@
 	:container-type		:relative
 	:x			36
 	:y			34
-	:width			542
-	:height			227
 	:visible		:true
 	:active			:true
 	:border-frame		:none
